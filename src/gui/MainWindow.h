@@ -39,8 +39,8 @@
 #include <QSettings>
 #include <QTableWidgetItem>
 
-#include <BSc_Aero.h>
-#include <BSc_Wing.h>
+#include <bsc/BSc_Aero.h>
+#include <bsc/BSc_Wing.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // FORWARD DECLARATIONS                                                       //

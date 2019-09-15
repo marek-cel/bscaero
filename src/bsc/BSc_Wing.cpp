@@ -32,8 +32,8 @@
 // INCLUDES                                                                   //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <BSc_Wing.h>
-#include <BSc_Solv.h>
+#include <bsc/BSc_Wing.h>
+#include <bsc/BSc_Solv.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // PUBLIC FUNCTIONS                                                           //
@@ -1521,7 +1521,7 @@ bool BSc_Wing::solveEquations() {
             }
         }
         // solving system of linear equations for single Angle of Attack
-        if ( GEN_SOLV( rhs, lhs, fourier_accuracy ) != -1 ) {
+        if ( solv( rhs, lhs, fourier_accuracy ) != -1 ) {
             success = false ;
         }
         // copying equation's result

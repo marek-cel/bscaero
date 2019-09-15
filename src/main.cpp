@@ -37,8 +37,8 @@
 #include <QApplication>
 #include <QSettings>
 
-#include <BSc_Aero.h>
-#include <ui/MainWindow.h>
+#include <bsc/BSc_Aero.h>
+#include <gui/MainWindow.h>
 
 #ifdef _LINUX_
     #include <QCleanlooksStyle>

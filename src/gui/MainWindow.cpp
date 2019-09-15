@@ -36,8 +36,8 @@
 #include <QMessageBox>
 #include <QTime>
 
-#include <ui/MainWindow.h>
-#include <ui/ui_MainWindow.h>
+#include <gui/MainWindow.h>
+#include <ui_MainWindow.h>
 
 #include <qwt_plot_curve.h>
 #include <qwt_scale_engine.h>
