@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/">
+        <file>ico/bsc.ico</file>
+		<file>png/dialog-info.png</file>
+		<file>png/dialog-logo.png</file>
+		<file>png/logo_ico.png</file>
+    </qresource>
+</RCC>
