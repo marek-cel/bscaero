@@ -19,76 +19,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  ******************************************************************************/
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DIALOGSECTION_H
+#define DIALOGSECTION_H
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <QMainWindow>
-#include <QSettings>
-
-#include <aero/Wing.h>
+#include <QDialog>
 
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace Ui
 {
-    class MainWindow;
+    class DialogSection;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class MainWindow : public QMainWindow
+class DialogSection : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit MainWindow( QWidget *parent = Q_NULLPTR );
+    explicit DialogSection( QWidget *parent = Q_NULLPTR );
 
-    ~MainWindow();
+    ~DialogSection();
 
-protected:
+    double getSpan();
+    double getLE();
+    double getTE();
+    double getSlope();
+    double getAngle();
 
-    void closeEvent( QCloseEvent *event );
+    void setSpanMin( double min );
+    void setSpanMax( double max );
+    void setSpanDisabled( double disabled );
 
 private:
 
-    Ui::MainWindow *_ui;    ///< UI object
-
-    QString _fileName;      ///< current file name
-
-    Wing *_wing;            ///< main wing object
-
-    bool _params_saved;     ///< specifies if computation parameters have been set
-    bool _file_changed;     ///< specifies if current wing geo data, computation parameters and results has been saved to file
-
-    void settingsRead();
-    void settingsSave();
-
-    void updateAll();
-    void updateGraphicsViewPlanform();
-    //void updatePlotPlanform();
-    void updateTableWidgetSectionsData();
-
-private slots:
-
-    void on_actionFileNew_triggered();
-    void on_actionFileOpen_triggered();
-    void on_actionFileSave_triggered();
-    void on_actionFileSaveAs_triggered();
-
-    void on_actionExit_triggered();
-
-    void on_actionAbout_triggered();
-
-    void on_tableWidgetSectionsData_currentCellChanged( int row, int, int, int );
-
-    void on_pushButtonSectionInsert_clicked();
-    void on_pushButtonSectionEdit_clicked();
-    void on_pushButtonSectionRemove_clicked();
+    Ui::DialogSection *_ui;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#endif // MAINWINDOW_H
+#endif // DIALOGSECTION_H

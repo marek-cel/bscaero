@@ -19,76 +19,82 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  ******************************************************************************/
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+
+#include <gui/DialogSection.h>
+#include <ui_DialogSection.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <QMainWindow>
-#include <QSettings>
-
-#include <aero/Wing.h>
-
-////////////////////////////////////////////////////////////////////////////////
-
-namespace Ui
+DialogSection::DialogSection( QWidget *parent ) :
+    QDialog ( parent ),
+    _ui ( new Ui::DialogSection )
 {
-    class MainWindow;
+    _ui->setupUi( this );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class MainWindow : public QMainWindow
+DialogSection::~DialogSection()
 {
-    Q_OBJECT
+    if ( _ui ) delete _ui;
+    _ui = Q_NULLPTR;
+}
 
-public:
-
-    explicit MainWindow( QWidget *parent = Q_NULLPTR );
-
-    ~MainWindow();
-
-protected:
-
-    void closeEvent( QCloseEvent *event );
-
-private:
-
-    Ui::MainWindow *_ui;    ///< UI object
-
-    QString _fileName;      ///< current file name
-
-    Wing *_wing;            ///< main wing object
-
-    bool _params_saved;     ///< specifies if computation parameters have been set
-    bool _file_changed;     ///< specifies if current wing geo data, computation parameters and results has been saved to file
-
-    void settingsRead();
-    void settingsSave();
-
-    void updateAll();
-    void updateGraphicsViewPlanform();
-    //void updatePlotPlanform();
-    void updateTableWidgetSectionsData();
-
-private slots:
-
-    void on_actionFileNew_triggered();
-    void on_actionFileOpen_triggered();
-    void on_actionFileSave_triggered();
-    void on_actionFileSaveAs_triggered();
-
-    void on_actionExit_triggered();
-
-    void on_actionAbout_triggered();
-
-    void on_tableWidgetSectionsData_currentCellChanged( int row, int, int, int );
-
-    void on_pushButtonSectionInsert_clicked();
-    void on_pushButtonSectionEdit_clicked();
-    void on_pushButtonSectionRemove_clicked();
-};
+double DialogSection::getSpan()
+{
+    return _ui->spinBoxSpan->value();
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#endif // MAINWINDOW_H
+double DialogSection::getLE()
+{
+    return _ui->spinBoxLE->value();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+double DialogSection::getTE()
+{
+    return _ui->spinBoxTE->value();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+double DialogSection::getSlope()
+{
+    return _ui->spinBoxSlope->value();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+double DialogSection::getAngle()
+{
+    return _ui->spinBoxAngle->value();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setSpanMin( double min )
+{
+    _ui->spinBoxSpan->setMinimum( min );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setSpanMax( double max )
+{
+    _ui->spinBoxSpan->setMaximum( max );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setSpanDisabled( double disabled )
+{
+    _ui->labelSpan->setEnabled( !disabled );
+    _ui->labelUnitSpan->setEnabled( !disabled );
+    _ui->spinBoxSpan->setEnabled( !disabled );
+}
