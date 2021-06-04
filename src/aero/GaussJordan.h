@@ -24,7 +24,40 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int solv( double *x, double *A, int n, int m = 1, double a_tol = 1.e-12 );
+#include <cmath>
+
+#include <defs.h>
+
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief Gauss-Jordan numerical method of solving systems of linear equations.
+ *
+ * @see Press W., et al.: Numerical Recipes: The Art of Scientific Computing, 2007, p.41
+ * @see Baron B., Piatek L.: Metody numeryczne w C++ Builder, 2004, p.34. [in Polish]
+ * @see https://en.wikipedia.org/wiki/Gaussian_elimination
+ */
+class GaussJordan
+{
+public:
+
+    /**
+     * @brief Solves system of linear equations using Gauss-Jordan method.
+     * @param mtr left hand side matrix
+     * @param rhs right hand size vector
+     * @param x result vector
+     * @param eps minimum value treated as not-zero
+     * @return FDM_SUCCESS on success and FDM_FAILURE on failure
+     */
+    static int solve( const int size, const double *mtr, const double *rhs,
+                      double *x, double eps = 1.0e-14 );
+
+    /** @brief Swaps matrix rows. */
+    static void swapRowsMatr( const int size, double *mtr, int row1, int row2 );
+
+    /** @brief Swaps vector rows. */
+    static void swapRowsVect( const int size, double *vec, int row1, int row2 );
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 

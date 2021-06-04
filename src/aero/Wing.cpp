@@ -25,7 +25,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-BSc_Wing::BSc_Wing() :
+Wing::Wing() :
     pi( 4 * atan( 1.0 ) )
 {
     // setting file_name
@@ -82,14 +82,14 @@ BSc_Wing::BSc_Wing() :
 
 ////////////////////////////////////////////////////////////////////////////////
 
-BSc_Wing::~BSc_Wing()
+Wing::~Wing()
 {
     releaseResults() ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::addSectionData( double span_y, double le_x, double te_x, double slope, double angle )
+bool Wing::addSectionData( double span_y, double le_x, double te_x, double slope, double angle )
 {    
     double* new_sections_data[5] ;
     double data_set[5] = { span_y, le_x, te_x, slope, angle } ;
@@ -109,7 +109,7 @@ bool BSc_Wing::addSectionData( double span_y, double le_x, double te_x, double s
 	// if NOT return FALSE on failure
 	return false ;
     
-    // check if new Wing Span Y Coordinate already exists in BSc_Wing::sections_data[ ] array
+    // check if new Wing Span Y Coordinate already exists in Wing::sections_data[ ] array
     if ( checkIfSectionExists( span_y ) )
 	// if exists return FALSE on failure
 	return false ; 
@@ -136,19 +136,19 @@ bool BSc_Wing::addSectionData( double span_y, double le_x, double te_x, double s
 	    sections_data[i] = new_sections_data[i] ;
     }
     
-    // Increment BSc_Wing::sections by one
+    // Increment Wing::sections by one
     sections++ ;
     
-    // sort new BSc_Wing::sections_data[ ]  array
+    // sort new Wing::sections_data[ ]  array
     sortSectionsData() ;
     
     // recalculate Wing Geometric Data
     calculateGeometry() ;
     
-    // write BSc_Wing::sections_data array to file
+    // write Wing::sections_data array to file
     writeWingInputToFile() ;
     
-    // setting BSc_Wing::results_uptodate as FALSE
+    // setting Wing::results_uptodate as FALSE
     results_uptodate = false ;
     
     // return TRUE on success
@@ -157,7 +157,7 @@ bool BSc_Wing::addSectionData( double span_y, double le_x, double te_x, double s
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::compute( void )
+bool Wing::compute( void )
 {
     bool ret = true;
     
@@ -231,7 +231,7 @@ bool BSc_Wing::compute( void )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::deleteSectionData( int row )
+bool Wing::deleteSectionData( int row )
 {
     double* new_sections_data[5] ;
     int i, j ;
@@ -239,7 +239,7 @@ bool BSc_Wing::deleteSectionData( int row )
     // if more than 1 section one cannot delete 1st cross section
     if ( sections > 1 && row == 0 ) return false ;
     
-    // If row is smaller than length of BSc_Wing::sections_data[ ]
+    // If row is smaller than length of Wing::sections_data[ ]
     if ( row < sections )
     {
 	    // For every value in set (Wing Span Y Coordinate, Leading Edge X Coordinate, etc.)
@@ -269,22 +269,22 @@ bool BSc_Wing::deleteSectionData( int row )
 	        sections_data[i] = new_sections_data[i] ;
 	    }
 	
-	    // Decrement BSc_Wing::sections by one
+        // Decrement Wing::sections by one
 	    sections-- ;
     	
 	    // recalculate Wing Geometric Data
 	    calculateGeometry() ;
     	
-	    // write BSc_Wing::sections_data array to file
+        // write Wing::sections_data array to file
 	    writeWingInputToFile() ;
     	
-	    // setting BSc_Wing::results_uptodate as FALSE
+        // setting Wing::results_uptodate as FALSE
 	    results_uptodate = false ;
     	
 	    // return TRUE on success
 	    return true ;
     }
-    else // If row is greater than length of BSc_Wing::sections_data[ ]
+    else // If row is greater than length of Wing::sections_data[ ]
     {
 	    // return FALSE on failure
 	    return false ;
@@ -293,7 +293,7 @@ bool BSc_Wing::deleteSectionData( int row )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::editSectionData( double span_y, double le_x, double te_x, double slope, double angle, int row )
+bool Wing::editSectionData( double span_y, double le_x, double te_x, double slope, double angle, int row )
 {
     double data_set[5] = { span_y, le_x, te_x, slope, angle };
     int i;
@@ -310,11 +310,11 @@ bool BSc_Wing::editSectionData( double span_y, double le_x, double te_x, double 
     if ( te_x <= le_x ) return false;
     
     // If new value is different than old value of Wing Span Y Coordinate AND
-    // new Wing Span Y Coordinate already exists in BSc_Wing::sections_data[ ] array
+    // new Wing Span Y Coordinate already exists in Wing::sections_data[ ] array
     // if exists return FALSE on failure
     if ( ( span_y != sections_data[0][row] ) &&  checkIfSectionExists( span_y ) ) return false;
     
-    // If row is smaller than length of BSc_Wing::wing_cs_data[ ]
+    // If row is smaller than length of Wing::wing_cs_data[ ]
     if ( row < sections )
     {
 	    // For every value in set (Wing Span Y Coordinate, Leading Edge X Coordinate, etc.)
@@ -324,22 +324,22 @@ bool BSc_Wing::editSectionData( double span_y, double le_x, double te_x, double 
 	        sections_data[i][row] = data_set[i] ;
 	    }
     	
-	    // sort new BSc_Wing::sections_data[ ]  array
+        // sort new Wing::sections_data[ ]  array
 	    sortSectionsData() ;
     	
 	    // recalculate Wing Geometric Data
 	    calculateGeometry() ;
     	
-	    // write BSc_Wing::sections_data array to file
+        // write Wing::sections_data array to file
 	    writeWingInputToFile() ;
     	
-	    // setting BSc_Wing::results_uptodate as FALSE
+        // setting Wing::results_uptodate as FALSE
 	    results_uptodate = false ;
     	
 	    // return TRUE on success
 	    return true ;
     }
-    else // If row is NOT smaller than length of BSc_Wing::sections_data[ ]
+    else // If row is NOT smaller than length of Wing::sections_data[ ]
     {
 	    // return FALSE on failure
 	    return false ;
@@ -348,7 +348,7 @@ bool BSc_Wing::editSectionData( double span_y, double le_x, double te_x, double 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getAoADeg( int aoa )
+double Wing::getAoADeg( int aoa )
 {
     if ( aoa < aoa_iterations )
 	return angle_of_attack_deg[aoa];
@@ -358,42 +358,42 @@ double BSc_Wing::getAoADeg( int aoa )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getAoA_Finish( void )
+double Wing::getAoA_Finish( void )
 {
     return aoa_finish ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int BSc_Wing::getAoA_Iterations( void )
+int Wing::getAoA_Iterations( void )
 {
     return aoa_iterations ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getAoA_Start( void )
+double Wing::getAoA_Start( void )
 {
     return aoa_start ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getAoA_Step( void )
+double Wing::getAoA_Step( void )
 {
     return aoa_step ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getAspectRatio( void )
+double Wing::getAspectRatio( void )
 {
     return aspect_ratio ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getDragCoef( int aoa )
+double Wing::getDragCoef( int aoa )
 {
     if ( aoa < aoa_iterations )
 	    return induced_drag_coefficient[aoa] ;
@@ -403,7 +403,7 @@ double BSc_Wing::getDragCoef( int aoa )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getDragCoefDist( int aoa, int section )
+double Wing::getDragCoefDist( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
 	    return induced_drag_coefficient_distribution[aoa][section] ;
@@ -413,7 +413,7 @@ double BSc_Wing::getDragCoefDist( int aoa, int section )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getGamma( int aoa, int section )
+double Wing::getGamma( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
     	return gamma[aoa][section] ;
@@ -423,28 +423,28 @@ double BSc_Wing::getGamma( int aoa, int section )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getFluidDensity( void )
+double Wing::getFluidDensity( void )
 {
     return fluid_density ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getFluidVelocity( void )
+double Wing::getFluidVelocity( void )
 {
     return fluid_velocity ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int BSc_Wing::getFourierAccuracy( void )
+int Wing::getFourierAccuracy( void )
 {
     return fourier_accuracy ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getLiftCoef( int aoa )
+double Wing::getLiftCoef( int aoa )
 {
     if ( aoa < aoa_iterations )
 	    return lift_coefficient[aoa] ;
@@ -454,7 +454,7 @@ double BSc_Wing::getLiftCoef( int aoa )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getLiftCoefDist( int aoa, int section )
+double Wing::getLiftCoefDist( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
     	return lift_coefficient_distribution[aoa][section] ;
@@ -464,28 +464,28 @@ double BSc_Wing::getLiftCoefDist( int aoa, int section )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int BSc_Wing::getSections( void )
+int Wing::getSections( void )
 {
     return sections ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int BSc_Wing::getSectionsFullspan( void )
+int Wing::getSectionsFullspan( void )
 {
     return sections_fullspan ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int BSc_Wing::getSectionsIterations( void )
+int Wing::getSectionsIterations( void )
 {
     return sections_iterations ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getSectionAngle( int i )
+double Wing::getSectionAngle( int i )
 {
     if ( i < sections )
     	return sections_data[4][i] ;
@@ -495,7 +495,7 @@ double BSc_Wing::getSectionAngle( int i )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getSectionLEX( int i )
+double Wing::getSectionLEX( int i )
 {
     if ( i < sections )
     	return sections_data[1][i] ;
@@ -505,7 +505,7 @@ double BSc_Wing::getSectionLEX( int i )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getSectionSlope( int i )
+double Wing::getSectionSlope( int i )
 {
     if ( i < sections )
     	return sections_data[3][i] ;
@@ -515,7 +515,7 @@ double BSc_Wing::getSectionSlope( int i )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getSectionTEX( int i )
+double Wing::getSectionTEX( int i )
 {
     if ( i < sections )
     	return sections_data[2][i] ;
@@ -525,7 +525,7 @@ double BSc_Wing::getSectionTEX( int i )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getSectionY( int i )
+double Wing::getSectionY( int i )
 {
     if ( i < sections )
     	return sections_data[0][i] ;
@@ -535,14 +535,14 @@ double BSc_Wing::getSectionY( int i )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getTaperRatio( void )
+double Wing::getTaperRatio( void )
 {
     return taper_ratio ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getVelocityDist( int aoa, int section )
+double Wing::getVelocityDist( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
     	return induced_velocity_distribution[aoa][section] ;
@@ -552,21 +552,21 @@ double BSc_Wing::getVelocityDist( int aoa, int section )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getWingArea( void )
+double Wing::getWingArea( void )
 {
     return wing_area ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getWingSpan( void )
+double Wing::getWingSpan( void )
 {
     return wing_span ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-double BSc_Wing::getWingSpanCoef( int section )
+double Wing::getWingSpanCoef( int section )
 {
     if ( section < sections_fullspan )
     	return ( 2 * wingspan[section] / wing_span ) ;
@@ -576,21 +576,21 @@ double BSc_Wing::getWingSpanCoef( int section )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::isParametersSaved( void )
+bool Wing::isParametersSaved( void )
 {
     return parameters_saved ; 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::isResultsUpToDate( void )
+bool Wing::isResultsUpToDate( void )
 {
     return results_uptodate ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::readFromFile( const char* file )
+bool Wing::readFromFile( const char* file )
 {
     int a, i, n ;
     FILE* fl ;
@@ -721,7 +721,7 @@ bool BSc_Wing::readFromFile( const char* file )
 		        induced_drag_coefficient_distribution[a] = new double [sections_fullspan] ;
 	        }
 
-            // reading BSc_Wing::gamma (circulation)
+            // reading Wing::gamma (circulation)
 	        for ( i = 0; i < sections_fullspan; i++ )
             {
 		        for ( a = 0; a < aoa_iterations; a++ )
@@ -730,7 +730,7 @@ bool BSc_Wing::readFromFile( const char* file )
 		        }
 	        }
 
-            // reading BSc_Wing::lift_coefficient_distribution
+            // reading Wing::lift_coefficient_distribution
 	        for ( i = 0; i < sections_fullspan; i++ )
             {
 		        for ( a = 0; a < aoa_iterations; a++ )
@@ -739,7 +739,7 @@ bool BSc_Wing::readFromFile( const char* file )
 		        }
 	        }
 
-            // reading BSc_Wing::induced_velocity_distribution
+            // reading Wing::induced_velocity_distribution
 	        for ( i = 0; i < sections_fullspan; i++ )
             {
 		        for ( a = 0; a < aoa_iterations; a++ )
@@ -748,7 +748,7 @@ bool BSc_Wing::readFromFile( const char* file )
 		        }
 	        }
 
-            // reading BSc_Wing::induced_drag_coefficient_distribution
+            // reading Wing::induced_drag_coefficient_distribution
 	        for ( i = 0; i < sections_fullspan; i++ )
             {
 		        for ( a = 0; a < aoa_iterations; a++ )
@@ -762,13 +762,13 @@ bool BSc_Wing::readFromFile( const char* file )
 	    lift_coefficient = new double [aoa_iterations] ;
 	    induced_drag_coefficient = new double [aoa_iterations] ;
 
-        // reading BSc_Wing::lift_coefficient
+        // reading Wing::lift_coefficient
 	    for ( a = 0; a < aoa_iterations; a++ )
         {
 	        fscanf( fl, "%lf", &lift_coefficient[a] ) ;
 	    }
 
-        // reading BSc_Wing::induced_drag_coefficient
+        // reading Wing::induced_drag_coefficient
 	    for ( a = 0; a < aoa_iterations; a++ )
         {
 	        fscanf( fl, "%lf", &induced_drag_coefficient[a] ) ;
@@ -787,7 +787,7 @@ bool BSc_Wing::readFromFile( const char* file )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::setParameters( double a_start, double a_finish, int a_iterations, double f_velocity, double f_density, int s_iterations, int f_accuracy )
+bool Wing::setParameters( double a_start, double a_finish, int a_iterations, double f_velocity, double f_density, int s_iterations, int f_accuracy )
 {
     bool input_valid = true;
     
@@ -816,13 +816,13 @@ bool BSc_Wing::setParameters( double a_start, double a_finish, int a_iterations,
     // Fluid Density should be greater than 0.0
     if ( ! (f_density > 0.0) ) input_valid =  false ;
     
-    // Number of Cross Sections should be greater or equal to BSc_Wing::sections
+    // Number of Cross Sections should be greater or equal to Wing::sections
     if ( ! (s_iterations >= sections) ) input_valid =  false ;
     
     // Fourier Series Accuracy should be smaller than Number of Cross Section less by 1
     if ( ! (s_iterations > f_accuracy) ) input_valid = false ;
     
-    // If all parameters are valid delete BSc_Wing::equations_lhs and save parameters
+    // If all parameters are valid delete Wing::equations_lhs and save parameters
     if ( input_valid )
     {
 	    aoa_start = a_start ;
@@ -840,7 +840,7 @@ bool BSc_Wing::setParameters( double a_start, double a_finish, int a_iterations,
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeToDefaultFile( void )
+bool Wing::writeToDefaultFile( void )
 {
     if ( file_name )
     {
@@ -854,7 +854,7 @@ bool BSc_Wing::writeToDefaultFile( void )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeToFile( const char* file )
+bool Wing::writeToFile( const char* file )
 {
     int a, i, n ;
     FILE* fl ;
@@ -926,7 +926,7 @@ bool BSc_Wing::writeToFile( const char* file )
 		fprintf( fl, "\n" ) ;
 	    }
 
-            // writing BSc_Wing::gamma (circulation)
+            // writing Wing::gamma (circulation)
 	    for ( i = 0; i < sections_fullspan; i++ ) {
 		for ( a = 0; a < aoa_iterations; a++ ) {
 		    if ( a == aoa_iterations -1 )
@@ -937,7 +937,7 @@ bool BSc_Wing::writeToFile( const char* file )
 		fprintf( fl, "\n" ) ;
 	    }
 
-            // writing BSc_Wing::lift_coefficient_distribution
+            // writing Wing::lift_coefficient_distribution
 	    for ( i = 0; i < sections_fullspan; i++ ) {
 		for ( a = 0; a < aoa_iterations; a++ ) {
 		    if ( a == aoa_iterations -1 )
@@ -948,7 +948,7 @@ bool BSc_Wing::writeToFile( const char* file )
 		fprintf( fl, "\n" ) ;
 	    }
 
-            // writing BSc_Wing::induced_velocity_distribution
+            // writing Wing::induced_velocity_distribution
 	    for ( i = 0; i < sections_fullspan; i++ ) {
 		for ( a = 0; a < aoa_iterations; a++ ) {
 		    if ( a == aoa_iterations -1 )
@@ -959,7 +959,7 @@ bool BSc_Wing::writeToFile( const char* file )
 		fprintf( fl, "\n" ) ;
 	    }
 
-            // writing BSc_Wing::induced_drag_coefficient_distribution
+            // writing Wing::induced_drag_coefficient_distribution
 	    for ( i = 0; i < sections_fullspan; i++ ) {
 		for ( a = 0; a < aoa_iterations; a++ ) {
 		    if ( a == aoa_iterations -1 )
@@ -970,12 +970,12 @@ bool BSc_Wing::writeToFile( const char* file )
 		fprintf( fl, "\n" ) ;
 	    }
 
-            // writing BSc_Wing::lift_coefficient
+            // writing Wing::lift_coefficient
 	    for ( a = 0; a < aoa_iterations; a++ ) {
 		fprintf( fl, "%f\n", lift_coefficient[a] ) ;
 	    }
 
-            // writing BSc_Wing::induced_drag_coefficient
+            // writing Wing::induced_drag_coefficient
 	    for ( a = 0; a < aoa_iterations; a++ ) {
 		fprintf( fl, "%f\n", induced_drag_coefficient[a] ) ;
 	    }
@@ -995,7 +995,7 @@ bool BSc_Wing::writeToFile( const char* file )
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::calculateCharacteristics() {
+void Wing::calculateCharacteristics() {
    int a, i, n ;
    double sum_nAn2, sum_nAnsin, tmp_gamma ;
 
@@ -1074,7 +1074,7 @@ void BSc_Wing::calculateCharacteristics() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::calculateGeometry() {
+void Wing::calculateGeometry() {
     int i ;
     // geometric data
     wing_span = .0 ;
@@ -1085,19 +1085,19 @@ void BSc_Wing::calculateGeometry() {
     // If at least 2 sections coduct calculations
     if ( sections > 1 ) {
 
-        // Calculating Wing Span (BSc_Wing::wing_span)
+        // Calculating Wing Span (Wing::wing_span)
         wing_span = 2 * ( sections_data[0][sections - 1] - sections_data[0][0] ) ;
 
-        // Calculating Wing Area (BSc_Wing::wing_area)
+        // Calculating Wing Area (Wing::wing_area)
         for ( i = 0; i < ( sections - 1 ); i++ ) {
             wing_area += ( ( sections_data[2][i] - sections_data[1][i] ) + ( sections_data[2][i + 1] - sections_data[1][i + 1] )  ) / 2 * ( sections_data[0][i + 1] - sections_data[0][i] ) ;
         }
         wing_area *= 2 ;
 
-        // Calculating Aspect Ratio (BSc_Wing::aspect_ratio)
+        // Calculating Aspect Ratio (Wing::aspect_ratio)
         aspect_ratio = wing_span * wing_span / wing_area ;
 
-        // Calculating Taper Ratio (BSc_Wing::taper_ratio)
+        // Calculating Taper Ratio (Wing::taper_ratio)
         taper_ratio = ( sections_data[2][sections - 1] - sections_data[1][sections - 1] ) / ( sections_data[2][0] - sections_data[1][0] ) ;
     }
 
@@ -1105,7 +1105,7 @@ void BSc_Wing::calculateGeometry() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::checkIfSectionExists( double span_y ) {
+bool Wing::checkIfSectionExists( double span_y ) {
     int i ;
     bool cs_exists = false ;
     double* haystack_span ;
@@ -1126,7 +1126,7 @@ bool BSc_Wing::checkIfSectionExists( double span_y ) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::createEquations() {
+void Wing::createEquations() {
     int i, a, n, cur_section ;
     double sin_phi, rhs ;
     int step = (int)floor( ( sections_iterations - 2.0 ) / ( ( fourier_accuracy + 1.0 ) / 2.0 ) ) ;
@@ -1207,7 +1207,7 @@ void BSc_Wing::createEquations() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::interpolateSections() {
+void Wing::interpolateSections() {
     int i ;
 
     // creating arrays of interpolating data
@@ -1320,7 +1320,7 @@ void BSc_Wing::interpolateSections() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::iterateAoA() {
+void Wing::iterateAoA() {
     int i ;
 
     // calculating angle of attack iteration step
@@ -1342,7 +1342,7 @@ void BSc_Wing::iterateAoA() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::releaseResults () {
+void Wing::releaseResults () {
     int i ;
     // releasing memory
     for ( i = 0; i < old_accuracy; i++ ) {
@@ -1405,14 +1405,14 @@ void BSc_Wing::releaseResults () {
     phi = 0;
     mu  = 0;
 
-    // setting new BSc_Wing::old_accuracy and BSc_Wing::old_aoa_iterations
+    // setting new Wing::old_accuracy and Wing::old_aoa_iterations
     old_accuracy = fourier_accuracy ;
     old_aoa_iterations = aoa_iterations ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::rewriteSectionsForFullSpan() {
+void Wing::rewriteSectionsForFullSpan() {
    double* f_wingspan ;
    double* f_chord_length ;
    double* f_lift_curve_slope ;
@@ -1456,7 +1456,7 @@ void BSc_Wing::rewriteSectionsForFullSpan() {
        mu[ i + sections_iterations - 1 ]  = ( 0.25 * f_chord_length[ i + sections_iterations - 1 ] * f_lift_curve_slope[ i + sections_iterations - 1 ] ) / wing_span ;
    }
 
-   // setting number of sections in full span BSc_Wing::sections_fullspan
+   // setting number of sections in full span Wing::sections_fullspan
    sections_fullspan = f_iterations ;
 
    // deleting semi span arrays
@@ -1477,13 +1477,13 @@ void BSc_Wing::rewriteSectionsForFullSpan() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::solveEquations() {
+bool Wing::solveEquations() {
     bool success = true ;
     int a, i, n = 0 ;
     double* lhs ;
     double* rhs ;
 
-    // creating BSc_Wing::fourier_terms array's first dimension
+    // creating Wing::fourier_terms array's first dimension
     fourier_terms = new double* [aoa_iterations] ;
     // and second dimension
     for ( a = 0; a < aoa_iterations; a++ ) {
@@ -1491,7 +1491,7 @@ bool BSc_Wing::solveEquations() {
     }
 
     // creating temporary arrays
-    lhs = new double [ fourier_accuracy * fourier_accuracy + fourier_accuracy ] ;
+    lhs = new double [ fourier_accuracy * fourier_accuracy ] ;
     rhs = new double [ fourier_accuracy ] ;
 
     // iterating over Angle of Attack
@@ -1505,7 +1505,8 @@ bool BSc_Wing::solveEquations() {
             }
         }
         // solving system of linear equations for single Angle of Attack
-        if ( solv( rhs, lhs, fourier_accuracy ) != -1 ) {
+        if ( GaussJordan::solve( fourier_accuracy, lhs, rhs, rhs ) == BSC_FAILURE )
+        {
             success = false ;
         }
         // copying equation's result
@@ -1525,7 +1526,7 @@ bool BSc_Wing::solveEquations() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::sortFullSpanSections() {
+void Wing::sortFullSpanSections() {
      bool sorted ;
     int i, j ;
     double temp ;
@@ -1575,7 +1576,7 @@ void BSc_Wing::sortFullSpanSections() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void BSc_Wing::sortSectionsData() {
+void Wing::sortSectionsData() {
     bool sorted ;
     int i, j, k ;
     double temp ;
@@ -1601,7 +1602,7 @@ void BSc_Wing::sortSectionsData() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeAoAToFile() {
+bool Wing::writeAoAToFile() {
     int a ;
     FILE* file ;
 
@@ -1618,7 +1619,7 @@ bool BSc_Wing::writeAoAToFile() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeEquationsToFile() {
+bool Wing::writeEquationsToFile() {
     int a, i, n ;
     bool ret = true ;
     FILE* file ;
@@ -1656,7 +1657,7 @@ bool BSc_Wing::writeEquationsToFile() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeFourierToFile() {
+bool Wing::writeFourierToFile() {
     int a, n ;
     FILE* file ;
 
@@ -1676,7 +1677,7 @@ bool BSc_Wing::writeFourierToFile() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeFullspanToFile() {
+bool Wing::writeFullspanToFile() {
     int i ;
     FILE* file ;
 
@@ -1693,7 +1694,7 @@ bool BSc_Wing::writeFullspanToFile() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeInterpolatedToFile() {
+bool Wing::writeInterpolatedToFile() {
     int i ;
     FILE* file ;
 
@@ -1710,7 +1711,7 @@ bool BSc_Wing::writeInterpolatedToFile() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeParametersToFile() {
+bool Wing::writeParametersToFile() {
     FILE* file ;
 
     if ((file=fopen("../tmp/tmp.parameters", "w"))!=NULL) {
@@ -1739,7 +1740,7 @@ bool BSc_Wing::writeParametersToFile() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BSc_Wing::writeWingInputToFile() {
+bool Wing::writeWingInputToFile() {
     int i ;
     FILE* file ;
 
