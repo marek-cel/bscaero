@@ -26,6 +26,7 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QShortcut>
 
 #include <aero/Wing.h>
 
@@ -56,19 +57,33 @@ private:
 
     Ui::MainWindow *_ui;    ///< UI object
 
+    QShortcut *_scSave;     ///< key shortcut - save
+
     QString _fileName;      ///< current file name
 
     Wing *_wing;            ///< main wing object
 
-    bool _params_saved;     ///< specifies if computation parameters have been set
     bool _file_changed;     ///< specifies if current wing geo data, computation parameters and results has been saved to file
+
+    void askIfSave();
+
+    void fileOpen();
+    void fileNew();
+    void fileSave();
+    void fileSaveAs();
+
+    void sectionInsert();
+    void sectionEdit();
+    void sectionRemove();
 
     void settingsRead();
     void settingsSave();
 
+    void setWingParameters();
+
     void updateAll();
     void updateGraphicsViewPlanform();
-    //void updatePlotPlanform();
+    void updateGroupBoxCompParams();
     void updateTableWidgetSectionsData();
 
 private slots:
@@ -83,10 +98,19 @@ private slots:
     void on_actionAbout_triggered();
 
     void on_tableWidgetSectionsData_currentCellChanged( int row, int, int, int );
+    void on_tableWidgetSectionsData_cellDoubleClicked( int row, int );
 
     void on_pushButtonSectionInsert_clicked();
     void on_pushButtonSectionEdit_clicked();
     void on_pushButtonSectionRemove_clicked();
+
+    void on_spinBoxAoASteps_valueChanged( int arg1 );
+    void on_spinBoxAoAStart_valueChanged(double arg1);
+    void on_spinBoxAoAFinish_valueChanged(double arg1);
+    void on_spinBoxAirDensity_valueChanged(double arg1);
+    void on_spinBoxAirVelocity_valueChanged(double arg1);
+    void on_spinBoxSpanwiseSteps_valueChanged(int arg1);
+    void on_spinBoxFourierAccuracy_valueChanged(int arg1);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

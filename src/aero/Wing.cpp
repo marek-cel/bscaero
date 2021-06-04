@@ -617,7 +617,7 @@ bool Wing::readFromFile( const char* file )
 
         // reading parameters
     	fscanf( fl, "%lf %lf %d %lf %lf %lf %d %d\n", &aoa_start, &aoa_finish, &aoa_iterations, &aoa_step, &fluid_velocity, &fluid_density, &sections_iterations, &fourier_accuracy ) ;
-	
+
 	    parameters_saved = true ;
 	
 	    sections_fullspan = 2 * sections_iterations - 1 ;

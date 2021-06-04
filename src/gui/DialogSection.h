@@ -55,6 +55,12 @@ public:
     void setSpanMax( double max );
     void setSpanDisabled( double disabled );
 
+    void setSpan( double span );
+    void setLE( double le );
+    void setTE( double te );
+    void setSlope( double slope );
+    void setAngle( double angle );
+
 private:
 
     Ui::DialogSection *_ui;

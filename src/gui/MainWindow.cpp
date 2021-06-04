@@ -42,19 +42,19 @@ MainWindow::MainWindow( QWidget *parent ) :
     QMainWindow ( parent ),
     _ui ( new Ui::MainWindow ),
 
+    _scSave ( Q_NULLPTR ),
+
     _wing ( Q_NULLPTR ),
 
-    _params_saved ( false ),
     _file_changed ( false )
 {
     _ui->setupUi( this );
 
+    _scSave = new QShortcut( QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(on_actionFileSave_triggered()) );
+
     _wing = new Wing();
 
     settingsRead();
-
-    //_ui->plotPlanform->enableAxis( 0, false );
-    //_ui->plotPlanform->enableAxis( 2, false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +62,9 @@ MainWindow::MainWindow( QWidget *parent ) :
 MainWindow::~MainWindow()
 {
     settingsSave();
+
+    if ( _scSave ) delete _scSave;
+    _scSave = Q_NULLPTR;
 
     if ( _ui ) delete _ui;
     _ui = Q_NULLPTR;
@@ -74,9 +77,263 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent( QCloseEvent *event )
 {
+    if ( _file_changed ) askIfSave();
+
     /////////////////////////////////
     QMainWindow::closeEvent( event );
     /////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::askIfSave()
+{
+    QString title = BSC_AERO_APP_NAME;
+    QString text  = tr( "Do you want to save changes?" );
+
+    QMessageBox::StandardButton result = QMessageBox::question( this, title, text,
+                                                                QMessageBox::Yes | QMessageBox::No,
+                                                                QMessageBox::Yes );
+
+    if ( result == QMessageBox::Yes )
+    {
+        fileSave();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::fileOpen()
+{
+    QString caption = "Open...";
+    QString dir = ( _fileName.length() > 0 ) ? QFileInfo( _fileName ).absolutePath() : "";
+    QString filter;
+    QString selectedFilter;
+
+    filter += selectedFilter = "DAT (*.dat)";
+
+    QString file = QFileDialog::getOpenFileName( this, caption, dir, filter, &selectedFilter );
+
+    if ( file.length() > 0 )
+    {
+        _fileName = file;
+
+        if ( _wing ) delete _wing;
+        _wing = new Wing();
+
+        if ( _wing->readFromFile( _fileName.toStdString().c_str() ) )
+        {
+            int spanwiseSteps   = _wing->getSectionsIterations();
+            int fourierAccuracy = _wing->getFourierAccuracy();
+
+            _ui->spinBoxAoASteps->setValue( _wing->getAoA_Iterations() );
+            updateGroupBoxCompParams();
+
+            _ui->spinBoxAoAStart  ->setValue( _wing->getAoA_Start() );
+            _ui->spinBoxAoAFinish ->setValue( _wing->getAoA_Finish() );
+
+            _ui->spinBoxAirDensity  ->setValue( _wing->getFluidDensity() );
+            _ui->spinBoxAirVelocity ->setValue( _wing->getFluidVelocity() );
+
+            _ui->spinBoxSpanwiseSteps->setValue( spanwiseSteps );
+            _ui->spinBoxFourierAccuracy->setValue( fourierAccuracy );
+
+            _file_changed = false;
+
+            updateAll();
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::fileNew()
+{
+    if ( _wing ) delete _wing;
+    _wing = new Wing();
+
+    _file_changed = false;
+
+    _fileName = "";
+
+    updateAll();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::fileSave()
+{
+    if ( _fileName.length() > 0 )
+    {
+        if ( _wing->writeToFile( _fileName.toStdString().c_str() ) )
+        {
+            _file_changed = false;
+            updateAll();
+        }
+    }
+    else
+    {
+        fileSaveAs();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::fileSaveAs()
+{
+    QString caption = "Save as...";
+    QString dir = ( _fileName.length() > 0 ) ? QFileInfo( _fileName ).absolutePath() : ".";
+    QString filter;
+    QString selectedFilter;
+
+    filter += selectedFilter = "DAT (*.dat)";
+
+    QString newFile = QFileDialog::getSaveFileName( this, caption, dir, filter, &selectedFilter );
+
+    if ( newFile.length() > 0 )
+    {
+        _fileName = newFile;
+
+        if ( _wing->writeToFile( _fileName.toStdString().c_str() ) )
+        {
+            _file_changed = false;
+            updateAll();
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::sectionInsert()
+{
+    if ( !_wing ) _wing = new Wing();
+
+    DialogSection *dialog = new DialogSection( this );
+
+    int n = _wing->getSections();
+
+    if ( n == 0 )
+    {
+        dialog->setSpanMin( 0.0 );
+        dialog->setSpanMax( 0.0 );
+        dialog->setSpanDisabled( true );
+    }
+    else
+    {
+        int row = _ui->tableWidgetSectionsData->currentRow();
+
+        if ( row == -1 || row == n - 1 )
+        {
+            dialog->setSpanMin( _wing->getSectionY( n - 1 ) );
+        }
+        else
+        {
+            dialog->setSpanMin( _wing->getSectionY( row - 1 ) );
+            dialog->setSpanMax( _wing->getSectionY( row ) );
+        }
+    }
+
+    if ( dialog->exec() == QDialog::Accepted )
+    {
+        bool result = _wing->addSectionData( dialog->getSpan(),
+                                             dialog->getLE(),
+                                             dialog->getTE(),
+                                             dialog->getSlope(),
+                                             dialog->getAngle() );
+
+        if ( result )
+        {
+            updateAll();
+
+            _file_changed = true;
+        }
+    }
+
+    if ( dialog ) delete dialog;
+    dialog = Q_NULLPTR;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::sectionEdit()
+{
+    DialogSection *dialog = new DialogSection( this );
+
+    int n = _wing->getSections();
+
+    if ( n == 0 ) return;
+
+    int row = _ui->tableWidgetSectionsData->currentRow();
+
+    if ( row > 0 )
+    {
+        dialog->setSpanMin( _wing->getSectionY( row - 1 ) );
+    }
+    else
+    {
+        dialog->setSpanMin( 0.0 );
+    }
+
+    if ( row < n - 2 )
+    {
+        dialog->setSpanMax( _wing->getSectionY( row + 1 ) );
+    }
+    else
+    {
+        dialog->setSpanMax( 99.99 );
+    }
+
+
+
+    dialog->setSpan( _wing->getSectionY( row ) );
+    dialog->setLE( _wing->getSectionLEX( row ) );
+    dialog->setTE( _wing->getSectionTEX( row ) );
+    dialog->setSlope( _wing->getSectionSlope( row ) );
+    dialog->setAngle( _wing->getSectionAngle( row ) );
+
+    if ( dialog->exec() == QDialog::Accepted )
+    {
+        bool result = _wing->editSectionData( dialog->getSpan(),
+                                              dialog->getLE(),
+                                              dialog->getTE(),
+                                              dialog->getSlope(),
+                                              dialog->getAngle(),
+                                              row );
+
+        if ( result )
+        {
+            updateAll();
+
+            _file_changed = true;
+        }
+    }
+
+    if ( dialog ) delete dialog;
+    dialog = Q_NULLPTR;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::sectionRemove()
+{
+    QString title = BSC_AERO_APP_NAME;
+    QString text  = tr( "Do you want to remove section data?" );
+
+    QMessageBox::StandardButton result = QMessageBox::question( this, title, text,
+                                                                QMessageBox::Yes | QMessageBox::No,
+                                                                QMessageBox::No );
+
+    if ( result == QMessageBox::Yes )
+    {
+        bool result = _wing->deleteSectionData( _ui->tableWidgetSectionsData->currentRow() );
+
+        if ( result )
+        {
+            updateAll();
+
+            _file_changed = true;
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -109,10 +366,43 @@ void MainWindow::settingsSave()
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void MainWindow::setWingParameters()
+{
+    bool result = _wing->setParameters( _ui->spinBoxAoAStart        ->value(),
+                                        _ui->spinBoxAoAFinish       ->value(),
+                                        _ui->spinBoxAoASteps        ->value(),
+                                        _ui->spinBoxAirVelocity     ->value(),
+                                        _ui->spinBoxAirDensity      ->value(),
+                                        _ui->spinBoxSpanwiseSteps   ->value(),
+                                        _ui->spinBoxFourierAccuracy ->value() );
+
+    if ( result )
+    {
+        _file_changed = true;
+        updateAll();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::updateAll()
 {
+    QString title = BSC_AERO_APP_NAME;
+
+    if ( _fileName.length() > 0 )
+    {
+        title += " - " + QFileInfo( _fileName ).fileName();
+    }
+
+    if ( _file_changed )
+    {
+        title += " (*)";
+    }
+
+    setWindowTitle( title );
+
     updateGraphicsViewPlanform();
-    //updatePlotPlanform();
+    updateGroupBoxCompParams();
     updateTableWidgetSectionsData();
 }
 
@@ -138,42 +428,27 @@ void MainWindow::updateGraphicsViewPlanform()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-//void MainWindow::updatePlotPlanform()
-//{
-//    // clearing current plot
-//    _ui->plotPlanform->detachItems( QwtPlotItem::Rtti_PlotCurve  , true );
-//    _ui->plotPlanform->detachItems( QwtPlotItem::Rtti_PlotMarker , true );
-//
-//    // creating arrays of size eq. to number of cross sections
-//    QVector< double > span;
-//    QVector< double > le_x;
-//    QVector< double > te_x;
-//
-//    QwtPlotCurve* le_curve = new QwtPlotCurve( "Leading Edge"  );
-//    QwtPlotCurve* te_curve = new QwtPlotCurve( "Trailing Edge" );
-//
-//    // comping cross sections data into arrays
-//    for ( int i = 0; i < _wing->getSections(); i++ )
-//    {
-//        span.push_back(  _wing->getSectionY   ( i ) );
-//        le_x.push_back( -_wing->getSectionLEX ( i ) );
-//        te_x.push_back( -_wing->getSectionTEX ( i ) );
-//    }
-//
-//    // setting curves data
-//    le_curve->setSamples( span, le_x );
-//    te_curve->setSamples( span, te_x );
-//
-//    le_curve->setPen( QPen( Qt::blue , 2 ) );
-//    te_curve->setPen( QPen( Qt::red  , 2 ) );
-//
-//    // inserting curves into plot
-//    le_curve->attach( _ui->plotPlanform );
-//    te_curve->attach( _ui->plotPlanform );
-//
-//    // reploting plot
-//    _ui->plotPlanform->replot();
-//}
+void MainWindow::updateGroupBoxCompParams()
+{
+    if ( _ui->spinBoxAoASteps->value() > 1 )
+    {
+        _ui->labelAoAFinish     ->setEnabled( true );
+        _ui->spinBoxAoAFinish   ->setEnabled( true );
+        _ui->labelUnitAoAFinish ->setEnabled( true );
+    }
+    else
+    {
+        _ui->labelAoAFinish     ->setEnabled( false );
+        _ui->spinBoxAoAFinish   ->setEnabled( false );
+        _ui->labelUnitAoAFinish ->setEnabled( false );
+
+        _ui->spinBoxAoAFinish->setValue( _ui->spinBoxAoAStart->value() );
+    }
+
+    _ui->spinBoxAoAFinish->setMinimum( _ui->spinBoxAoAStart->value() );
+
+    //_ui->spinBoxSpanwiseSteps->setMinimum( _wing->getSections() );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -203,28 +478,32 @@ void MainWindow::updateTableWidgetSectionsData()
 
 void MainWindow::on_actionFileNew_triggered()
 {
+    if ( _file_changed ) askIfSave();
 
+    fileNew();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::on_actionFileOpen_triggered()
 {
+    if ( _file_changed ) askIfSave();
 
+    fileOpen();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::on_actionFileSave_triggered()
 {
-
+    fileSave();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::on_actionFileSaveAs_triggered()
 {
-
+    fileSaveAs();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -274,84 +553,92 @@ void MainWindow::on_tableWidgetSectionsData_currentCellChanged( int row, int, in
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void MainWindow::on_tableWidgetSectionsData_cellDoubleClicked( int /*row*/, int )
+{
+    sectionEdit();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::on_pushButtonSectionInsert_clicked()
 {
-    if ( !_wing ) _wing = new Wing();
-
-    DialogSection *dialog = new DialogSection( this );
-
-    int n = _wing->getSections();
-
-    if ( n == 0 )
-    {
-        dialog->setSpanMin( 0.0 );
-        dialog->setSpanMax( 0.0 );
-        dialog->setSpanDisabled( true );
-    }
-    else
-    {
-        int row = _ui->tableWidgetSectionsData->currentRow();
-
-        if ( row == -1 || row == n - 1 )
-        {
-            dialog->setSpanMin( _wing->getSectionY( n - 1 ) );
-        }
-        else
-        {
-            dialog->setSpanMin( _wing->getSectionY( row - 1 ) );
-            dialog->setSpanMax( _wing->getSectionY( row ) );
-        }
-    }
-
-    if ( dialog->exec() == QDialog::Accepted )
-    {
-        bool result = _wing->addSectionData( dialog->getSpan(),
-                                             dialog->getLE(),
-                                             dialog->getTE(),
-                                             dialog->getSlope(),
-                                             dialog->getAngle() );
-
-        if ( result )
-        {
-            updateAll();
-
-            _params_saved = false;
-            _file_changed = true;
-        }
-    }
-
-    if ( dialog ) delete dialog;
-    dialog = Q_NULLPTR;
+    sectionInsert();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::on_pushButtonSectionEdit_clicked()
 {
-
+    sectionEdit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::on_pushButtonSectionRemove_clicked()
 {
-    QString title = windowTitle();
-    QString text  = tr( "Do you want to remove section data?" );
+    sectionRemove();
+}
 
-    QMessageBox::StandardButton result = QMessageBox::question( this, title, text,
-                                                                QMessageBox::Yes | QMessageBox::No,
-                                                                QMessageBox::No );
+////////////////////////////////////////////////////////////////////////////////
 
-    if ( result == QMessageBox::Yes )
+void MainWindow::on_spinBoxAoASteps_valueChanged( int arg1 )
+{
+    setWingParameters();
+
+    if ( arg1 > 1 )
     {
-        bool result = _wing->deleteSectionData( _ui->tableWidgetSectionsData->currentRow() );
-
-        if ( result )
-        {
-            updateAll();
-
-            _params_saved = false;
-            _file_changed = true;
-        }
+        _ui->labelAoAFinish     ->setEnabled( true );
+        _ui->labelUnitAoAFinish ->setEnabled( true );
+        _ui->spinBoxAoAFinish   ->setEnabled( true );
     }
+    else
+    {
+        _ui->labelAoAFinish     ->setEnabled( false );
+        _ui->labelUnitAoAFinish ->setEnabled( false );
+        _ui->spinBoxAoAFinish   ->setEnabled( false );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_spinBoxAoAStart_valueChanged( double /*arg1*/ )
+{
+    setWingParameters();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_spinBoxAoAFinish_valueChanged( double /*arg1*/ )
+{
+    setWingParameters();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_spinBoxAirDensity_valueChanged( double /*arg1*/ )
+{
+    setWingParameters();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_spinBoxAirVelocity_valueChanged( double /*arg1*/ )
+{
+    setWingParameters();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_spinBoxSpanwiseSteps_valueChanged( int arg1 )
+{
+    _ui->spinBoxFourierAccuracy->setMaximum( arg1 - 2 );
+
+    setWingParameters();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_spinBoxFourierAccuracy_valueChanged( int /*arg1*/ )
+{
+    setWingParameters();
 }

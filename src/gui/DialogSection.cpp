@@ -40,6 +40,8 @@ DialogSection::~DialogSection()
     _ui = Q_NULLPTR;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 double DialogSection::getSpan()
 {
     return _ui->spinBoxSpan->value();
@@ -98,3 +100,40 @@ void DialogSection::setSpanDisabled( double disabled )
     _ui->labelUnitSpan->setEnabled( !disabled );
     _ui->spinBoxSpan->setEnabled( !disabled );
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setSpan( double span )
+{
+    _ui->spinBoxSpan->setValue( span );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setLE( double le )
+{
+    _ui->spinBoxLE->setValue( le );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setTE( double te )
+{
+    _ui->spinBoxTE->setValue( te );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setSlope( double slope )
+{
+    _ui->spinBoxSlope->setValue( slope );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void DialogSection::setAngle( double angle )
+{
+    _ui->spinBoxAngle->setValue( angle );
+}
+
+
