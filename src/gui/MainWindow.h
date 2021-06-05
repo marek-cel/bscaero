@@ -30,6 +30,9 @@
 
 #include <aero/Wing.h>
 
+#include <gui/DialogResults.h>
+#include <gui/DialogSection.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace Ui
@@ -55,15 +58,17 @@ protected:
 
 private:
 
-    Ui::MainWindow *_ui;    ///< UI object
+    Ui::MainWindow *_ui;            ///< UI object
 
-    QShortcut *_scSave;     ///< key shortcut - save
+    DialogResults *_dialogResults;  ///<
 
-    QString _fileName;      ///< current file name
+    QShortcut *_scSave;             ///< key shortcut - save
 
-    Wing *_wing;            ///< main wing object
+    QString _fileName;              ///< current file name
 
-    bool _file_changed;     ///< specifies if current wing geo data, computation parameters and results has been saved to file
+    Wing *_wing;                    ///< main wing object
+
+    bool _file_changed;             ///< specifies if current wing geo data, computation parameters and results has been saved to file
 
     void askIfSave();
 
@@ -81,6 +86,8 @@ private:
 
     void setWingParameters();
 
+    void showResults();
+
     void updateAll();
     void updateGraphicsViewPlanform();
     void updateGroupBoxCompParams();
@@ -94,6 +101,8 @@ private slots:
     void on_actionFileSaveAs_triggered();
 
     void on_actionExit_triggered();
+
+    void on_actionViewResults_triggered();
 
     void on_actionAbout_triggered();
 
@@ -111,6 +120,8 @@ private slots:
     void on_spinBoxAirVelocity_valueChanged(double arg1);
     void on_spinBoxSpanwiseSteps_valueChanged(int arg1);
     void on_spinBoxFourierAccuracy_valueChanged(int arg1);
+
+    void on_pushButtonCompute_clicked();
 };
 
 ////////////////////////////////////////////////////////////////////////////////

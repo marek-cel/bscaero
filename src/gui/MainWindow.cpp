@@ -26,6 +26,7 @@
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTime>
 
 #include <qwt_plot_curve.h>
 #include <qwt_plot_marker.h>
@@ -34,13 +35,13 @@
 
 #include <defs.h>
 
-#include <gui/DialogSection.h>
-
 ////////////////////////////////////////////////////////////////////////////////
 
 MainWindow::MainWindow( QWidget *parent ) :
     QMainWindow ( parent ),
     _ui ( new Ui::MainWindow ),
+
+    _dialogResults ( Q_NULLPTR ),
 
     _scSave ( Q_NULLPTR ),
 
@@ -49,6 +50,8 @@ MainWindow::MainWindow( QWidget *parent ) :
     _file_changed ( false )
 {
     _ui->setupUi( this );
+
+    _dialogResults = new DialogResults( this );
 
     _scSave = new QShortcut( QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(on_actionFileSave_triggered()) );
 
@@ -62,6 +65,9 @@ MainWindow::MainWindow( QWidget *parent ) :
 MainWindow::~MainWindow()
 {
     settingsSave();
+
+    if ( _dialogResults ) delete _dialogResults;
+    _dialogResults = Q_NULLPTR;
 
     if ( _scSave ) delete _scSave;
     _scSave = Q_NULLPTR;
@@ -141,6 +147,8 @@ void MainWindow::fileOpen()
             _file_changed = false;
 
             updateAll();
+
+            if ( _wing->isResultsUpToDate() ) showResults();
         }
     }
 }
@@ -385,6 +393,13 @@ void MainWindow::setWingParameters()
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void MainWindow::showResults()
+{
+    _dialogResults->show();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::updateAll()
 {
     QString title = BSC_AERO_APP_NAME;
@@ -515,6 +530,13 @@ void MainWindow::on_actionExit_triggered()
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void MainWindow::on_actionViewResults_triggered()
+{
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void MainWindow::on_actionAbout_triggered()
 {
     QFile aboutHtmlFile( ":/gui/html/about.html" );
@@ -641,4 +663,33 @@ void MainWindow::on_spinBoxSpanwiseSteps_valueChanged( int arg1 )
 void MainWindow::on_spinBoxFourierAccuracy_valueChanged( int /*arg1*/ )
 {
     setWingParameters();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_pushButtonCompute_clicked()
+{
+    QTime time;
+
+    time.start();
+    std::cout << "[" << time.toString( "hh:mm:ss.zzz" ).toStdString() << "] Computations started..." << std::endl;
+
+    bool success = _wing->compute();
+
+    if ( success )
+    {
+        time.start();
+        std::cout << "[" << time.toString( "hh:mm:ss.zzz" ).toStdString() << "] Computations finished." << std::endl;
+
+        _file_changed = true;
+
+        updateAll();
+
+        showResults();
+    }
+    else
+    {
+        time.start();
+        std::cout << "[" << time.toString( "hh:mm:ss.zzz" ).toStdString() << "] Computations stopped. Error on Wing::computeCharacteristics()." << std::endl;
+    }
 }
