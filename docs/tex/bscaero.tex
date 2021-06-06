@@ -1,0 +1,45 @@
+\documentclass[12pt,a4paper]{report}
+\special{papersize=210mm,297mm}
+
+\usepackage{bscaero}
+
+\title{BScAero}
+\author{Marek Cel}
+\date{}
+
+\makeatletter
+
+\begin{document}
+  
+  \begin{titlepage}
+    \centering
+    {\huge \@title}
+    \par Software for Estimating Wing Aerodynamic Characteristics\par
+  \end{titlepage}
+  
+  %\maketitle
+
+  \noindent Copyright \copyright{} \the\year{} Marek M. Cel. All rights reserved.
+
+  \noindent Author: Marek M. Cel \\
+  Revision: 1 \\
+  Date: \today
+
+  \input{license_cc0}
+  
+  {
+    \clearpage
+    \setlength{\parskip}{0em}
+    \pdfbookmark[0]{\contentsname}{toc}
+    \tableofcontents
+  }
+  
+  Lorem ipsum. \cite{Prosnak1970}
+
+  
+  \clearpage
+  \bibliography{bscaero} 
+  \addcontentsline{toc}{chapter}{Bibliography}
+  \bibliographystyle{vancouver}
+  
+\end{document}
