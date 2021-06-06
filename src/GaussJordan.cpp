@@ -105,7 +105,7 @@ void GaussJordan::swapRowsMatr( const int size, double *mtr, int row1, int row2 
 {
     if ( ( row1 < size ) && ( row2 < size ) )
     {
-        double temp[ size ];
+        double *temp = new double[ size ];
 
         for ( int c = 0; c < size; c++ )
         {
@@ -113,6 +113,8 @@ void GaussJordan::swapRowsMatr( const int size, double *mtr, int row1, int row2 
             mtr[ row1 * size + c ] = mtr[ row2 * size + c ];
             mtr[ row2 * size + c ] = temp[ c ];
         }
+
+        delete [] temp;
     }
 }
 

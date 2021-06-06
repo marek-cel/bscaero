@@ -36,7 +36,12 @@ DialogResults::DialogResults(QWidget *parent) :
     _penPlot ( QPen( Qt::black, 2 ) )
 {
     _ui->setupUi( this );
+
+#   ifdef WIN32
+    _ui->textResults->setFontFamily( "Courier" );
+#   else
     _ui->textResults->setFontFamily( "Monospace" );
+#   endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////
