@@ -156,7 +156,7 @@ void GraphicsPlanform::updateView()
     double scaleX = static_cast< double >( width()  ) / ( 2.0 * x_max );
     double scaleY = static_cast< double >( height() ) / ( y_max - y_min );
 
-    double scale_pen = std::min( scaleX, scaleY );
+    double scale_pen = 0.1 * scaleX;
 
 
     double scale = 100.0;//std::min( scaleX, scaleY );

@@ -20,8 +20,8 @@
  * IN THE SOFTWARE.
  ******************************************************************************/
 
-#include <aero/Wing.h>
-#include <aero/GaussJordan.h>
+#include <Wing.h>
+#include <GaussJordan.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1501,7 +1501,7 @@ bool Wing::solveEquations() {
             rhs[i] = equations_rhs[a][i] ;
             // copying equations Left-Hand-Side to temporary array
             for ( n = 0; n < fourier_accuracy; n++ ) {
-                lhs[fourier_accuracy*n+i] = equations_lhs[i][n] ;
+                lhs[fourier_accuracy*n+i] = equations_lhs[n][i] ;
             }
         }
         // solving system of linear equations for single Angle of Attack

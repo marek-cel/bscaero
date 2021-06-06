@@ -26,7 +26,6 @@
 #include <QApplication>
 #include <QSettings>
 
-#include <aero/Wing.h>
 #include <gui/MainWindow.h>
 
 #include <defs.h>

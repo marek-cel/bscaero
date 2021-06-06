@@ -75,15 +75,18 @@ unix: LIBS += \
 ################################################################################
 
 HEADERS += \
-    defs.h
+    defs.h \
+    $$PWD/GaussJordan.h \
+    $$PWD/Wing.h
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    $$PWD/GaussJordan.cpp \
+    $$PWD/Wing.cpp
 
 RESOURCES += \
     bscaero.qrc
 
 ################################################################################
 
-include(aero/aero.pri)
 include(gui/gui.pri)

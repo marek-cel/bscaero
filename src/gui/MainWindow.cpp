@@ -395,6 +395,7 @@ void MainWindow::setWingParameters()
 
 void MainWindow::showResults()
 {
+    _dialogResults->setWing( _wing );
     _dialogResults->show();
 }
 
@@ -532,7 +533,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionViewResults_triggered()
 {
-
+    showResults();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -28,7 +28,7 @@
 #include <QSettings>
 #include <QShortcut>
 
-#include <aero/Wing.h>
+#include <Wing.h>
 
 #include <gui/DialogResults.h>
 #include <gui/DialogSection.h>

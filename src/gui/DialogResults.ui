@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,136 @@
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>3</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabPlot">
+      <attribute name="title">
+       <string>Plot</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelAoA">
+         <property name="text">
+          <string>AoA:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSlider" name="sliderAoA">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QDoubleSpinBox" name="spinBoxAoA">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
+         <property name="minimum">
+          <double>-90.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>90.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="labelUnitAoA">
+         <property name="text">
+          <string>[deg]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="4">
+        <widget class="QwtPlot" name="plotResults"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabTable">
+      <attribute name="title">
+       <string>Table</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QTextBrowser" name="textResults">
+         <property name="lineWrapMode">
+          <enum>QTextEdit::NoWrap</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QListWidget" name="listWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>Lift Coefficient</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Induced Drag Coefficient</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Circulation Spanwise Distribution</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Lift Coefficient Spanwise Distribution</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Induced Velocity Spanwise Distribution</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Induced Drag Coefficient Spanwise Distribution</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QwtPlot</class>
+   <extends>QFrame</extends>
+   <header>qwt_plot.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -20,12 +20,12 @@
  * IN THE SOFTWARE.
  ******************************************************************************/
 
-#include <aero/GaussJordan.h>
+#include <GaussJordan.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 
 int GaussJordan::solve( const int size, const double *mtr, const double *rhs,
-                  double *x, double eps )
+                        double *x, double eps )
 {
     int result = BSC_SUCCESS;
 

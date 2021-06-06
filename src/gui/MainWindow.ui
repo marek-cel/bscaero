@@ -29,141 +29,6 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0" rowspan="4">
-     <widget class="QGroupBox" name="groupBoxSectionsData">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="locale">
-       <locale language="English" country="UnitedStates"/>
-      </property>
-      <property name="title">
-       <string>Sections Data</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="2">
-        <widget class="QPushButton" name="pushButtonSectionRemove">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="locale">
-          <locale language="English" country="UnitedStates"/>
-         </property>
-         <property name="text">
-          <string>Remove</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="pushButtonSectionInsert">
-         <property name="locale">
-          <locale language="English" country="UnitedStates"/>
-         </property>
-         <property name="text">
-          <string>Insert</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="3">
-        <widget class="QTableWidget" name="tableWidgetSectionsData">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>1</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="locale">
-          <locale language="English" country="UnitedStates"/>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>true</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
-         </property>
-         <column>
-          <property name="text">
-           <string>Span</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Leading Edge</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Trailing Edge</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Lift Slope</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Zero Lift Angle</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pushButtonSectionEdit">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="locale">
-          <locale language="English" country="UnitedStates"/>
-         </property>
-         <property name="text">
-          <string>Edit</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="3">
-        <widget class="GraphicsPlanform" name="graphicsViewPlanform">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>1</horstretch>
-           <verstretch>1</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
-         </property>
-         <property name="interactive">
-          <bool>true</bool>
-         </property>
-         <property name="resizeAnchor">
-          <enum>QGraphicsView::AnchorViewCenter</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
     <item row="1" column="1">
      <spacer name="verticalSpacer">
       <property name="orientation">
@@ -179,10 +44,29 @@
     </item>
     <item row="0" column="1">
      <widget class="QGroupBox" name="groupBoxCompParams">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="title">
        <string>Computation Parameters</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelSpanwiseSteps">
+         <property name="text">
+          <string>Spanwise Steps:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBoxSpanwiseSteps</cstring>
+         </property>
+        </widget>
+       </item>
        <item row="3" column="1">
         <widget class="QDoubleSpinBox" name="spinBoxAirDensity">
          <property name="alignment">
@@ -202,20 +86,19 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="spinBoxAoASteps">
+       <item row="2" column="1">
+        <widget class="QDoubleSpinBox" name="spinBoxAoAFinish">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
          <property name="minimum">
-          <number>1</number>
+          <double>-90.000000000000000</double>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="labelUnitAirDensity">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[kg/m&lt;span style=&quot; vertical-align:super;&quot;&gt;3&lt;/span&gt;]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <property name="maximum">
+          <double>90.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -232,23 +115,83 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QDoubleSpinBox" name="spinBoxAoAStart">
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="minimum">
-          <double>-90.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>90.000000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="1">
         <widget class="QDoubleSpinBox" name="spinBoxAirVelocity">
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="labelUnitAoAFinish">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>[deg]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelAirVelocity">
+         <property name="text">
+          <string>Air Velocity:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBoxAirVelocity</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="spinBoxFourierAccuracy">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="labelUnitAirVelocity">
+         <property name="text">
+          <string>[m/s]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="labelUnitAoAStart">
+         <property name="text">
+          <string>[deg]</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelFourierAccuracy">
+         <property name="text">
+          <string>Fourier Series Terms:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBoxFourierAccuracy</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QSpinBox" name="spinBoxSpanwiseSteps">
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="minimum">
+          <number>4</number>
          </property>
         </widget>
        </item>
@@ -268,11 +211,21 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QDoubleSpinBox" name="spinBoxAoAFinish">
-         <property name="enabled">
-          <bool>false</bool>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelAirDensity">
+         <property name="text">
+          <string>Air Density:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>spinBoxAirDensity</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDoubleSpinBox" name="spinBoxAoAStart">
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
@@ -284,30 +237,13 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="labelUnitAirVelocity">
-         <property name="text">
-          <string>[m/s]</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="labelSpanwiseSteps">
-         <property name="text">
-          <string>Spanwise Steps:</string>
-         </property>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="spinBoxAoASteps">
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
-         <property name="buddy">
-          <cstring>spinBoxSpanwiseSteps</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="labelUnitAoAStart">
-         <property name="text">
-          <string>[deg]</string>
+         <property name="minimum">
+          <number>1</number>
          </property>
         </widget>
        </item>
@@ -324,76 +260,170 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelAirDensity">
+       <item row="3" column="2">
+        <widget class="QLabel" name="labelUnitAirDensity">
          <property name="text">
-          <string>Air Density:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>spinBoxAirDensity</cstring>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[kg/m&lt;span style=&quot; vertical-align:super;&quot;&gt;3&lt;/span&gt;]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="labelAirVelocity">
-         <property name="text">
-          <string>Air Velocity:</string>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="4">
+     <widget class="QGroupBox" name="groupBoxSectionsData">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
+      <property name="title">
+       <string>Sections Data</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>spinBoxAirVelocity</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QSpinBox" name="spinBoxSpanwiseSteps">
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="minimum">
-          <number>4</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="labelUnitAoAFinish">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>[deg]</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QSpinBox" name="spinBoxFourierAccuracy">
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="labelFourierAccuracy">
-         <property name="text">
-          <string>Fourier Series Terms:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-         <property name="buddy">
-          <cstring>spinBoxFourierAccuracy</cstring>
-         </property>
+         <widget class="QWidget" name="widget" native="true">
+          <layout class="QGridLayout" name="gridLayout_2">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0" colspan="3">
+            <widget class="QTableWidget" name="tableWidgetSectionsData">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>2</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="locale">
+              <locale language="English" country="UnitedStates"/>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::SingleSelection</enum>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
+             <column>
+              <property name="text">
+               <string>Span</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Leading Edge</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Trailing Edge</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Lift Slope</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Zero Lift Angle</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pushButtonSectionInsert">
+             <property name="locale">
+              <locale language="English" country="UnitedStates"/>
+             </property>
+             <property name="text">
+              <string>Insert</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushButtonSectionEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="locale">
+              <locale language="English" country="UnitedStates"/>
+             </property>
+             <property name="text">
+              <string>Edit</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="pushButtonSectionRemove">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="locale">
+              <locale language="English" country="UnitedStates"/>
+             </property>
+             <property name="text">
+              <string>Remove</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="GraphicsPlanform" name="graphicsViewPlanform">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="interactive">
+           <bool>true</bool>
+          </property>
+          <property name="renderHints">
+           <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+          </property>
+          <property name="resizeAnchor">
+           <enum>QGraphicsView::AnchorViewCenter</enum>
+          </property>
+         </widget>
         </widget>
        </item>
       </layout>
