@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Results</string>
   </property>
-  <property name="locale">
-   <locale language="English" country="UnitedStates"/>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1">
     <widget class="QTabWidget" name="tabWidget">

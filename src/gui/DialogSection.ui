@@ -19,9 +19,6 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="labelSpan">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>Span Coordinate:</string>
      </property>
@@ -35,9 +32,6 @@
    </item>
    <item row="0" column="1">
     <widget class="QDoubleSpinBox" name="spinBoxSpan">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -54,9 +48,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>[m]</string>
      </property>
@@ -64,9 +55,6 @@
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>Leading Edge Coordinate:</string>
      </property>
@@ -80,9 +68,6 @@
    </item>
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="spinBoxLE">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -102,9 +87,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>[m]</string>
      </property>
@@ -112,9 +94,6 @@
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_3">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>Trailing Edge Coordinate:</string>
      </property>
@@ -128,9 +107,6 @@
    </item>
    <item row="2" column="1">
     <widget class="QDoubleSpinBox" name="spinBoxTE">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -150,9 +126,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>[m]</string>
      </property>
@@ -160,9 +133,6 @@
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_4">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>Lift Slope:</string>
      </property>
@@ -176,9 +146,6 @@
    </item>
    <item row="3" column="1">
     <widget class="QDoubleSpinBox" name="spinBoxSlope">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -192,9 +159,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>[1/rad]</string>
      </property>
@@ -202,9 +166,6 @@
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_5">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>Zero Lift Angle:</string>
      </property>
@@ -218,9 +179,6 @@
    </item>
    <item row="4" column="1">
     <widget class="QDoubleSpinBox" name="spinBoxAngle">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -240,9 +198,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="text">
       <string>[deg]</string>
      </property>
@@ -250,9 +205,6 @@
    </item>
    <item row="6" column="0" colspan="3">
     <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -263,9 +215,6 @@
    </item>
    <item row="5" column="0" colspan="3">
     <spacer name="verticalSpacer">
-     <property name="locale">
-      <locale language="English" country="UnitedStates"/>
-     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>

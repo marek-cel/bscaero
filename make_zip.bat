@@ -15,6 +15,7 @@ copy /y bin\*.exe bscaero\bin
 xcopy data bscaero\data /E
 copy "%QTDIR%\bin\Qt5OpenGL.dll" bscaero\bin
 copy "%QWT_ROOT%\lib\qwt.dll" bscaero\bin
+copy LICENSE bscaero
 
 rem cd qt\bin
 rem call "%QTDIR%\bin\windeployqt.exe" --release mscsim.exe

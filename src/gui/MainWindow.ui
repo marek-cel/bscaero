@@ -17,9 +17,6 @@
    <iconset resource="../bscaero.qrc">
     <normaloff>:/bscaero.ico</normaloff>:/bscaero.ico</iconset>
   </property>
-  <property name="locale">
-   <locale language="English" country="UnitedStates"/>
-  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="2" column="1">
@@ -284,9 +281,6 @@
         <height>0</height>
        </size>
       </property>
-      <property name="locale">
-       <locale language="English" country="UnitedStates"/>
-      </property>
       <property name="title">
        <string>Sections Data</string>
       </property>
@@ -317,9 +311,6 @@
                <horstretch>0</horstretch>
                <verstretch>2</verstretch>
               </sizepolicy>
-             </property>
-             <property name="locale">
-              <locale language="English" country="UnitedStates"/>
              </property>
              <property name="alternatingRowColors">
               <bool>true</bool>
@@ -359,9 +350,6 @@
            </item>
            <item row="1" column="0">
             <widget class="QPushButton" name="pushButtonSectionInsert">
-             <property name="locale">
-              <locale language="English" country="UnitedStates"/>
-             </property>
              <property name="text">
               <string>Insert</string>
              </property>
@@ -372,9 +360,6 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
-             <property name="locale">
-              <locale language="English" country="UnitedStates"/>
-             </property>
              <property name="text">
               <string>Edit</string>
              </property>
@@ -384,9 +369,6 @@
             <widget class="QPushButton" name="pushButtonSectionRemove">
              <property name="enabled">
               <bool>false</bool>
-             </property>
-             <property name="locale">
-              <locale language="English" country="UnitedStates"/>
              </property>
              <property name="text">
               <string>Remove</string>

@@ -38,9 +38,9 @@ using namespace std;
 
 int main( int argc, char *argv[] )
 {
-#   ifdef _LINUX_
-    setenv( "LC_NUMERIC", "en_US", 1 );
-#   endif
+    setlocale( LC_ALL, "C" );
+
+    QLocale::setDefault( QLocale::system() );
 
     QApplication app( argc, argv );
     MainWindow   win;

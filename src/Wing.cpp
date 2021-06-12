@@ -21,6 +21,9 @@
  ******************************************************************************/
 
 #include <Wing.h>
+
+#include <fstream>
+
 #include <GaussJordan.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -97,43 +100,43 @@ bool Wing::addSectionData( double span_y, double le_x, double te_x, double slope
     
     // first cross section must be wing root (Y Coordinate = 0)
     if ( sections == 0 && span_y != 0.0)
-	return false ;
+        return false ;
     
     // check if given Wing Span Y Coordinate is less than 0.0
     if ( span_y < 0.0 )
-	// if so return FALSE on failure
-	return false ;
+        // if so return FALSE on failure
+        return false ;
     
     // check if given Trailing Edge X Coordinate is greater than given Leading Edge X Coordinate
     if ( te_x <= le_x )
-	// if NOT return FALSE on failure
-	return false ;
+        // if NOT return FALSE on failure
+        return false ;
     
     // check if new Wing Span Y Coordinate already exists in Wing::sections_data[ ] array
     if ( checkIfSectionExists( span_y ) )
-	// if exists return FALSE on failure
-	return false ; 
+        // if exists return FALSE on failure
+        return false ;
     
     // For every value in set (Wing Span Y Coordinate, Leading Edge X Coordinate, etc.)
     for ( i = 0; i < 5; i++ )
     {
-	    // create new array of length greater by one than current
-	    new_sections_data[i] = new double[sections + 1] ;
-    	
-	    // For every current existing sections
-	    for ( j = 0; j < sections; j++ )
+        // create new array of length greater by one than current
+        new_sections_data[i] = new double[sections + 1] ;
+
+        // For every current existing sections
+        for ( j = 0; j < sections; j++ )
         {
-	        // copy value into new array
-	        new_sections_data[i][j] = sections_data[i][j] ;
-	    }
-    	
-	    // copy new value into last element of the new array
-	    new_sections_data[i][sections] = data_set[i] ;
-    	
-	    // delete current array
-	    delete [] sections_data[i] ;
-	    // point at new array
-	    sections_data[i] = new_sections_data[i] ;
+            // copy value into new array
+            new_sections_data[i][j] = sections_data[i][j] ;
+        }
+
+        // copy new value into last element of the new array
+        new_sections_data[i][sections] = data_set[i] ;
+
+        // delete current array
+        delete [] sections_data[i] ;
+        // point at new array
+        sections_data[i] = new_sections_data[i] ;
     }
     
     // Increment Wing::sections by one
@@ -152,7 +155,7 @@ bool Wing::addSectionData( double span_y, double le_x, double te_x, double slope
     results_uptodate = false ;
     
     // return TRUE on success
-    return true ;  
+    return true ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -222,9 +225,9 @@ bool Wing::compute( void )
     if ( ret ) calculateCharacteristics() ;
     
     if ( ret )
-	    results_uptodate = true ;
+        results_uptodate = true ;
     else
-	    results_uptodate = false ;
+        results_uptodate = false ;
     
     return ret ;
 }
@@ -242,52 +245,52 @@ bool Wing::deleteSectionData( int row )
     // If row is smaller than length of Wing::sections_data[ ]
     if ( row < sections )
     {
-	    // For every value in set (Wing Span Y Coordinate, Leading Edge X Coordinate, etc.)
-	    for ( i = 0; i < 5; i++) {
-	        // create new array of length smaller by one than current
-	        new_sections_data[i] = new double[sections - 1] ;
-    	    
-	        // For every current existing sections
-	        for ( j = 0; j < ( sections - 1 ); j++ )
+        // For every value in set (Wing Span Y Coordinate, Leading Edge X Coordinate, etc.)
+        for ( i = 0; i < 5; i++) {
+            // create new array of length smaller by one than current
+            new_sections_data[i] = new double[sections - 1] ;
+
+            // For every current existing sections
+            for ( j = 0; j < ( sections - 1 ); j++ )
             {
-		        switch ( j < row )
+                switch ( j < row )
                 {
-		            // till deleting row (excluding)
-		        case true :
-		            new_sections_data[i][j] = sections_data[i][j] ;
-		            break ;
-		            // from deleting row (including)
-		        case false :
-		            new_sections_data[i][j] = sections_data[i][j + 1] ;
-		            break ;
-		        }
-	        }
-	    
-	        // delete current array
-	        delete [] sections_data[i] ;
-	        // point at new array
-	        sections_data[i] = new_sections_data[i] ;
-	    }
-	
+                // till deleting row (excluding)
+                case true :
+                    new_sections_data[i][j] = sections_data[i][j] ;
+                    break ;
+                    // from deleting row (including)
+                case false :
+                    new_sections_data[i][j] = sections_data[i][j + 1] ;
+                    break ;
+                }
+            }
+
+            // delete current array
+            delete [] sections_data[i] ;
+            // point at new array
+            sections_data[i] = new_sections_data[i] ;
+        }
+
         // Decrement Wing::sections by one
-	    sections-- ;
-    	
-	    // recalculate Wing Geometric Data
-	    calculateGeometry() ;
-    	
+        sections-- ;
+
+        // recalculate Wing Geometric Data
+        calculateGeometry() ;
+
         // write Wing::sections_data array to file
-	    writeWingInputToFile() ;
-    	
+        writeWingInputToFile() ;
+
         // setting Wing::results_uptodate as FALSE
-	    results_uptodate = false ;
-    	
-	    // return TRUE on success
-	    return true ;
+        results_uptodate = false ;
+
+        // return TRUE on success
+        return true ;
     }
     else // If row is greater than length of Wing::sections_data[ ]
     {
-	    // return FALSE on failure
-	    return false ;
+        // return FALSE on failure
+        return false ;
     }
 }
 
@@ -317,32 +320,32 @@ bool Wing::editSectionData( double span_y, double le_x, double te_x, double slop
     // If row is smaller than length of Wing::wing_cs_data[ ]
     if ( row < sections )
     {
-	    // For every value in set (Wing Span Y Coordinate, Leading Edge X Coordinate, etc.)
-	    for ( i = 0; i < 5; i++ )
+        // For every value in set (Wing Span Y Coordinate, Leading Edge X Coordinate, etc.)
+        for ( i = 0; i < 5; i++ )
         {
-	        // sets new values
-	        sections_data[i][row] = data_set[i] ;
-	    }
-    	
+            // sets new values
+            sections_data[i][row] = data_set[i] ;
+        }
+
         // sort new Wing::sections_data[ ]  array
-	    sortSectionsData() ;
-    	
-	    // recalculate Wing Geometric Data
-	    calculateGeometry() ;
-    	
+        sortSectionsData() ;
+
+        // recalculate Wing Geometric Data
+        calculateGeometry() ;
+
         // write Wing::sections_data array to file
-	    writeWingInputToFile() ;
-    	
+        writeWingInputToFile() ;
+
         // setting Wing::results_uptodate as FALSE
-	    results_uptodate = false ;
-    	
-	    // return TRUE on success
-	    return true ;
+        results_uptodate = false ;
+
+        // return TRUE on success
+        return true ;
     }
     else // If row is NOT smaller than length of Wing::sections_data[ ]
     {
-	    // return FALSE on failure
-	    return false ;
+        // return FALSE on failure
+        return false ;
     }
 }
 
@@ -351,9 +354,9 @@ bool Wing::editSectionData( double span_y, double le_x, double te_x, double slop
 double Wing::getAoADeg( int aoa )
 {
     if ( aoa < aoa_iterations )
-	return angle_of_attack_deg[aoa];
+        return angle_of_attack_deg[aoa];
     else
-	return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -396,9 +399,9 @@ double Wing::getAspectRatio( void )
 double Wing::getDragCoef( int aoa )
 {
     if ( aoa < aoa_iterations )
-	    return induced_drag_coefficient[aoa] ;
+        return induced_drag_coefficient[aoa] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -406,9 +409,9 @@ double Wing::getDragCoef( int aoa )
 double Wing::getDragCoefDist( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
-	    return induced_drag_coefficient_distribution[aoa][section] ;
+        return induced_drag_coefficient_distribution[aoa][section] ;
     else
-	    return 0;
+        return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -416,9 +419,9 @@ double Wing::getDragCoefDist( int aoa, int section )
 double Wing::getGamma( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
-    	return gamma[aoa][section] ;
+        return gamma[aoa][section] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -447,9 +450,9 @@ int Wing::getFourierAccuracy( void )
 double Wing::getLiftCoef( int aoa )
 {
     if ( aoa < aoa_iterations )
-	    return lift_coefficient[aoa] ;
+        return lift_coefficient[aoa] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -457,9 +460,9 @@ double Wing::getLiftCoef( int aoa )
 double Wing::getLiftCoefDist( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
-    	return lift_coefficient_distribution[aoa][section] ;
+        return lift_coefficient_distribution[aoa][section] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -488,9 +491,9 @@ int Wing::getSectionsIterations( void )
 double Wing::getSectionAngle( int i )
 {
     if ( i < sections )
-    	return sections_data[4][i] ;
+        return sections_data[4][i] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -498,9 +501,9 @@ double Wing::getSectionAngle( int i )
 double Wing::getSectionLEX( int i )
 {
     if ( i < sections )
-    	return sections_data[1][i] ;
+        return sections_data[1][i] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -508,9 +511,9 @@ double Wing::getSectionLEX( int i )
 double Wing::getSectionSlope( int i )
 {
     if ( i < sections )
-    	return sections_data[3][i] ;
+        return sections_data[3][i] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -518,9 +521,9 @@ double Wing::getSectionSlope( int i )
 double Wing::getSectionTEX( int i )
 {
     if ( i < sections )
-    	return sections_data[2][i] ;
+        return sections_data[2][i] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -528,9 +531,9 @@ double Wing::getSectionTEX( int i )
 double Wing::getSectionY( int i )
 {
     if ( i < sections )
-    	return sections_data[0][i] ;
+        return sections_data[0][i] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -545,9 +548,9 @@ double Wing::getTaperRatio( void )
 double Wing::getVelocityDist( int aoa, int section )
 {
     if ( aoa < aoa_iterations && section < sections_fullspan )
-    	return induced_velocity_distribution[aoa][section] ;
+        return induced_velocity_distribution[aoa][section] ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -569,16 +572,16 @@ double Wing::getWingSpan( void )
 double Wing::getWingSpanCoef( int section )
 {
     if ( section < sections_fullspan )
-    	return ( 2 * wingspan[section] / wing_span ) ;
+        return ( 2 * wingspan[section] / wing_span ) ;
     else
-	    return 0 ;
+        return 0 ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 bool Wing::isParametersSaved( void )
 {
-    return parameters_saved ; 
+    return parameters_saved ;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -593,195 +596,214 @@ bool Wing::isResultsUpToDate( void )
 bool Wing::readFromFile( const char* file )
 {
     int a, i, n ;
-    FILE* fl ;
+    std::fstream fs( file, std::ios_base::in );
     
-    if ( (fl=fopen(file, "r")) != NULL )
+    if ( fs.is_open() )
     {
         // reading number of input cross sections
-	    fscanf( fl, "%d", &sections );
+        fs >> sections;
 
         // creating wing geometry input arrays
-	    for ( i = 0; i < 5; i++ )
+        for ( i = 0; i < 5; i++ )
         {
             sections_data[i] = new double [sections] ;
-	    }
+        }
 
         // reading wing geometry input
-	    for ( i = 0; i < sections; i++ )
+        for ( i = 0; i < sections; i++ )
         {
-	        fscanf( fl, "%lf %lf %lf %lf %lf", &sections_data[0][i], &sections_data[1][i], &sections_data[2][i], &sections_data[3][i], &sections_data[4][i] ) ;
-	    }
+            fs >> sections_data[0][i];
+            fs >> sections_data[1][i];
+            fs >> sections_data[2][i];
+            fs >> sections_data[3][i];
+            fs >> sections_data[4][i];
+        }
 
         // calculating geometry
-	    calculateGeometry() ;
+        calculateGeometry() ;
 
         // reading parameters
-    	fscanf( fl, "%lf %lf %d %lf %lf %lf %d %d\n", &aoa_start, &aoa_finish, &aoa_iterations, &aoa_step, &fluid_velocity, &fluid_density, &sections_iterations, &fourier_accuracy ) ;
+        fs >> aoa_start;
+        fs >> aoa_finish;
+        fs >> aoa_iterations;
+        fs >> aoa_step;
+        fs >> fluid_velocity;
+        fs >> fluid_density;
+        fs >> sections_iterations;
+        fs >> fourier_accuracy;
 
-	    parameters_saved = true ;
-	
-	    sections_fullspan = 2 * sections_iterations - 1 ;
-	
-	    // checkiing if results exists
-	    int are_results ;
-	    fscanf( fl, "%d", &are_results ) ;
-	
-	    // if so reading results
-	    if ( are_results > 0 ) {
+        parameters_saved = true ;
+
+        sections_fullspan = 2 * sections_iterations - 1 ;
+
+        // checkiing if results exists
+        double are_results ;
+        fs >> are_results;
+
+        // if so reading results
+        if ( are_results > 0 ) {
 
             results_uptodate = true ;
 
             // creating angle of attach arrays
-	        angle_of_attack_deg = new double [aoa_iterations] ;
-	        angle_of_attack_rad = new double [aoa_iterations] ;
+            angle_of_attack_deg = new double [aoa_iterations] ;
+            angle_of_attack_rad = new double [aoa_iterations] ;
 
             // reading angle of attack iterations
-	        for ( a = 0; a < aoa_iterations; a++ )
+            for ( a = 0; a < aoa_iterations; a++ )
             {
-		        fscanf( fl, "%lf %lf", &angle_of_attack_deg[a], &angle_of_attack_rad[a] ) ;
-	        }
+                fs >> angle_of_attack_deg[a];
+                fs >> angle_of_attack_rad[a];
+            }
 
-	        // creating full span arrays
+            // creating full span arrays
             wingspan            = new double [sections_fullspan] ;
             chord_length        = new double [sections_fullspan] ;
             lift_curve_slope    = new double [sections_fullspan] ;
-	        angle_of_0_lift_deg = new double [sections_fullspan] ;
-	        angle_of_0_lift_rad = new double [sections_fullspan] ;
+            angle_of_0_lift_deg = new double [sections_fullspan] ;
+            angle_of_0_lift_rad = new double [sections_fullspan] ;
             phi = new double [sections_fullspan] ;
             mu  = new double [sections_fullspan] ;
 
-	        // reading full span section data to file
-	        for ( i = 0; i < sections_fullspan; i++ )
+            // reading full span section data to file
+            for ( i = 0; i < sections_fullspan; i++ )
             {
-                fscanf( fl, "%lf %lf %lf %lf %lf %lf %lf", &wingspan[i], &chord_length[i], &lift_curve_slope[i], &angle_of_0_lift_deg[i], &angle_of_0_lift_rad[i], &phi[i], &mu[i] ) ;
-	        }
+                fs >> wingspan[i];
+                fs >> chord_length[i];
+                fs >> lift_curve_slope[i];
+                fs >> angle_of_0_lift_deg[i];
+                fs >> angle_of_0_lift_rad[i];
+                fs >> phi[i];
+                fs >> mu[i];
+            }
 
             // creating equations' span array
-	        equations_span = new double [fourier_accuracy] ;
+            equations_span = new double [fourier_accuracy] ;
 
             // reading equations' span
-	        for ( i = 0; i < fourier_accuracy; i++ )
+            for ( i = 0; i < fourier_accuracy; i++ )
             {
-		        fscanf( fl, "%lf", &equations_span[i] ) ;
-	        }
+                fs >> equations_span[i];
+            }
 
             // creating Left-Hand-Sides of equations arrays
-	        equations_lhs = new double* [fourier_accuracy] ;
-	        for ( i = 0; i < fourier_accuracy; i++ )
+            equations_lhs = new double* [fourier_accuracy] ;
+            for ( i = 0; i < fourier_accuracy; i++ )
             {
-		        equations_lhs[i] = new double [fourier_accuracy] ;
-	        }
+                equations_lhs[i] = new double [fourier_accuracy] ;
+            }
 
             // reading Left-Hand-Sides of equations
-	        for ( i = 0; i < fourier_accuracy; i++ )
+            for ( i = 0; i < fourier_accuracy; i++ )
             {
-		        for ( n = 0; n < fourier_accuracy; n++ )
+                for ( n = 0; n < fourier_accuracy; n++ )
                 {
-		            fscanf( fl, "%lf", &equations_lhs[i][n] ) ;
-		        }
-	        }
+                    fs >> equations_lhs[i][n];
+                }
+            }
 
             // creating Right-Hand-Sides of equations arrays and Fouerier series terms array
-	        equations_rhs = new double* [aoa_iterations] ;
-	        fourier_terms = new double* [aoa_iterations] ;
-	        for ( a = 0; a < aoa_iterations; a++ )
+            equations_rhs = new double* [aoa_iterations] ;
+            fourier_terms = new double* [aoa_iterations] ;
+            for ( a = 0; a < aoa_iterations; a++ )
             {
-		        equations_rhs[a] = new double [fourier_accuracy] ;
-		        fourier_terms[a] = new double [fourier_accuracy] ;
-	        }
+                equations_rhs[a] = new double [fourier_accuracy] ;
+                fourier_terms[a] = new double [fourier_accuracy] ;
+            }
 
             // reading Right-Hand-Sides of equations
-	        for ( i = 0; i < fourier_accuracy; i++ )
+            for ( i = 0; i < fourier_accuracy; i++ )
             {
-		        for ( a = 0; a < aoa_iterations; a++ )
+                for ( a = 0; a < aoa_iterations; a++ )
                 {
-		            fscanf( fl, "%lf", &equations_rhs[a][i] ) ;
-		        }
-	        }
+                    fs >> equations_rhs[a][i];
+                }
+            }
 
             // reading Fourier series terms
-	        for ( n = 0; n < fourier_accuracy; n++ )
+            for ( n = 0; n < fourier_accuracy; n++ )
             {
-		        for ( a = 0; a < aoa_iterations; a++ )
+                for ( a = 0; a < aoa_iterations; a++ )
                 {
-		            fscanf( fl, "%lf", &fourier_terms[a][n] ) ;
-		        }
-	        }
+                    fs >> fourier_terms[a][n];
+                }
+            }
 
             // creating spanwise distribution characteristics' arrays
-	        gamma = new double* [aoa_iterations] ;
-	        lift_coefficient_distribution = new double* [aoa_iterations] ;
-	        induced_velocity_distribution = new double* [aoa_iterations] ;
-	        induced_drag_coefficient_distribution = new double* [aoa_iterations] ;
-	        for ( a = 0; a < aoa_iterations; a++ )
+            gamma = new double* [aoa_iterations] ;
+            lift_coefficient_distribution = new double* [aoa_iterations] ;
+            induced_velocity_distribution = new double* [aoa_iterations] ;
+            induced_drag_coefficient_distribution = new double* [aoa_iterations] ;
+            for ( a = 0; a < aoa_iterations; a++ )
             {
-		        gamma[a] = new double [sections_fullspan] ;
-		        lift_coefficient_distribution[a] = new double [sections_fullspan] ;
-		        induced_velocity_distribution[a] = new double [sections_fullspan] ;
-		        induced_drag_coefficient_distribution[a] = new double [sections_fullspan] ;
-	        }
+                gamma[a] = new double [sections_fullspan] ;
+                lift_coefficient_distribution[a] = new double [sections_fullspan] ;
+                induced_velocity_distribution[a] = new double [sections_fullspan] ;
+                induced_drag_coefficient_distribution[a] = new double [sections_fullspan] ;
+            }
 
             // reading Wing::gamma (circulation)
-	        for ( i = 0; i < sections_fullspan; i++ )
+            for ( i = 0; i < sections_fullspan; i++ )
             {
-		        for ( a = 0; a < aoa_iterations; a++ )
+                for ( a = 0; a < aoa_iterations; a++ )
                 {
-		            fscanf( fl, "%lf", &gamma[a][i] ) ;
-		        }
-	        }
+                    fs >> gamma[a][i];
+                }
+            }
 
             // reading Wing::lift_coefficient_distribution
-	        for ( i = 0; i < sections_fullspan; i++ )
+            for ( i = 0; i < sections_fullspan; i++ )
             {
-		        for ( a = 0; a < aoa_iterations; a++ )
+                for ( a = 0; a < aoa_iterations; a++ )
                 {
-		            fscanf( fl, "%lf", &lift_coefficient_distribution[a][i] ) ;
-		        }
-	        }
+                    fs >> lift_coefficient_distribution[a][i];
+                }
+            }
 
             // reading Wing::induced_velocity_distribution
-	        for ( i = 0; i < sections_fullspan; i++ )
+            for ( i = 0; i < sections_fullspan; i++ )
             {
-		        for ( a = 0; a < aoa_iterations; a++ )
+                for ( a = 0; a < aoa_iterations; a++ )
                 {
-		            fscanf( fl, "%lf", &induced_velocity_distribution[a][i] ) ;
-		        }
-	        }
+                    fs >> induced_velocity_distribution[a][i];
+                }
+            }
 
             // reading Wing::induced_drag_coefficient_distribution
-	        for ( i = 0; i < sections_fullspan; i++ )
+            for ( i = 0; i < sections_fullspan; i++ )
             {
-		        for ( a = 0; a < aoa_iterations; a++ )
+                for ( a = 0; a < aoa_iterations; a++ )
                 {
-		            fscanf( fl, "%lf", &induced_drag_coefficient_distribution[a][i] ) ;
-		        }
-	        }
-	    }
+                    fs >> induced_drag_coefficient_distribution[a][i];
+                }
+            }
+        }
 
         // creating arrays of angle of attack dependent characteristics
-	    lift_coefficient = new double [aoa_iterations] ;
-	    induced_drag_coefficient = new double [aoa_iterations] ;
+        lift_coefficient = new double [aoa_iterations] ;
+        induced_drag_coefficient = new double [aoa_iterations] ;
 
         // reading Wing::lift_coefficient
-	    for ( a = 0; a < aoa_iterations; a++ )
+        for ( a = 0; a < aoa_iterations; a++ )
         {
-	        fscanf( fl, "%lf", &lift_coefficient[a] ) ;
-	    }
+            fs >> lift_coefficient[a];
+        }
 
         // reading Wing::induced_drag_coefficient
-	    for ( a = 0; a < aoa_iterations; a++ )
+        for ( a = 0; a < aoa_iterations; a++ )
         {
-	        fscanf( fl, "%lf", &induced_drag_coefficient[a] ) ;
-	    }
-	    
-        fclose( fl ) ;
-	    strcpy( file_name, file ) ;
+            fs >> induced_drag_coefficient[a];
+        }
 
-	    return true ;
+        fs.close();
+
+        strcpy( file_name, file ) ;
+
+        return true ;
     }
     else
     {
-	    return false ;
+        return false ;
     }
 }
 
@@ -795,19 +817,19 @@ bool Wing::setParameters( double a_start, double a_finish, int a_iterations, dou
     if ( a_start == a_finish )
     {
         // if AoA Iteration Start Value eq. to AoA Iteration Finish Value
-	    // AoA Number of Iterations should be 1
+        // AoA Number of Iterations should be 1
         if ( ! (a_iterations == 1) ) input_valid =  false;
     }
     else if ( a_start < a_finish )
     {
 
         // if AoA Iteration Start Value less than AoA Iteration Finish Value
-	    // AoA Number of Iterations should be greater than 1
+        // AoA Number of Iterations should be greater than 1
         if ( ! (a_iterations > 1) ) input_valid =  false;
     }
     else
     {
-	    input_valid =  false;
+        input_valid =  false;
     }
     
     // Fluid Velocity should be greater than 0.0
@@ -825,14 +847,14 @@ bool Wing::setParameters( double a_start, double a_finish, int a_iterations, dou
     // If all parameters are valid delete Wing::equations_lhs and save parameters
     if ( input_valid )
     {
-	    aoa_start = a_start ;
-	    aoa_finish = a_finish ;
-	    aoa_iterations = a_iterations ;
-	    fluid_velocity = f_velocity ;
-	    fluid_density = f_density ;
-	    sections_iterations = s_iterations ;
-	    fourier_accuracy = 2 * f_accuracy - 1 ;
-	    parameters_saved = true ;
+        aoa_start = a_start ;
+        aoa_finish = a_finish ;
+        aoa_iterations = a_iterations ;
+        fluid_velocity = f_velocity ;
+        fluid_density = f_density ;
+        sections_iterations = s_iterations ;
+        fourier_accuracy = 2 * f_accuracy - 1 ;
+        parameters_saved = true ;
     }
     
     return input_valid ;
@@ -844,11 +866,11 @@ bool Wing::writeToDefaultFile( void )
 {
     if ( file_name )
     {
-	    return writeToFile(file_name);
+        return writeToFile(file_name);
     }
     else
     {
-	    return false;
+        return false;
     }
 }
 
@@ -857,224 +879,295 @@ bool Wing::writeToDefaultFile( void )
 bool Wing::writeToFile( const char* file )
 {
     int a, i, n ;
-    FILE* fl ;
+    std::fstream fs( file, std::ios_base::out );
     
-    if ((fl=fopen(file, "w"))!=NULL) {
+    if ( fs.is_open() )
+    {
 
         // writing number of input cross sections
-	fprintf( fl, "%d\n", sections ) ;
+        fs << sections << std::endl;
 
         // writing wing geometry inptu
-	for ( i = 0; i < sections; i++ ) {
-	    fprintf( fl, "%f %f %f %f %f\n", sections_data[0][i], sections_data[1][i], sections_data[2][i], sections_data[3][i], sections_data[4][i] ) ;
-	}
+        for ( i = 0; i < sections; i++ )
+        {
+            fs << sections_data[0][i];
+            fs << " ";
+            fs << sections_data[1][i];
+            fs << " ";
+            fs << sections_data[2][i];
+            fs << " ";
+            fs << sections_data[3][i];
+            fs << " ";
+            fs << sections_data[4][i];
+            fs << std::endl;
+        }
 
         // writing parameters
-	fprintf( fl, "%f %f %d %f %f %f %d %d\n", aoa_start, aoa_finish, aoa_iterations, aoa_step, fluid_velocity, fluid_density, sections_iterations, fourier_accuracy ) ;
+        fs << aoa_start;
+        fs << " ";
+        fs << aoa_finish;
+        fs << " ";
+        fs << aoa_iterations;
+        fs << " ";
+        fs << aoa_step;
+        fs << " ";
+        fs << fluid_velocity;
+        fs << " ";
+        fs << fluid_density;
+        fs << " ";
+        fs << sections_iterations;
+        fs << " ";
+        fs << fourier_accuracy;
+        fs << std::endl;
 
         // writing results
-	if ( results_uptodate ) {
+        if ( results_uptodate )
+        {
 
             // results exists
-	    fprintf( fl, "%d", 1 ) ;
+            fs << 1 << std::endl;
 
             // writing angle of attack iterations
-	    for ( a = 0; a < aoa_iterations; a++ ) {
-		fprintf( fl, "%f %f\n", angle_of_attack_deg[a], angle_of_attack_rad[a] ) ;
-	    }
+            for ( a = 0; a < aoa_iterations; a++ )
+            {
+                fs << angle_of_attack_deg[a];
+                fs << " ";
+                fs << angle_of_attack_rad[a];
+                fs << std::endl;
+            }
 
             // writing full span section data to file
-	    for ( i = 0; i < sections_fullspan; i++ ) {
-                fprintf( fl, "%f %f %f %f %f %f %f\n", wingspan[i], chord_length[i], lift_curve_slope[i], angle_of_0_lift_deg[i], angle_of_0_lift_rad[i], phi[i], mu[i] ) ;
-	    }
+            for ( i = 0; i < sections_fullspan; i++ )
+            {
+                fs << wingspan[i];
+                fs << " ";
+                fs << chord_length[i];
+                fs << " ";
+                fs << lift_curve_slope[i];
+                fs << " ";
+                fs << angle_of_0_lift_deg[i];
+                fs << " ";
+                fs << angle_of_0_lift_rad[i];
+                fs << " ";
+                fs << phi[i];
+                fs << " ";
+                fs << mu[i];
+                fs << std::endl;
+            }
 
             // writing equations' span
-	    for ( i = 0; i < fourier_accuracy; i++ ) {
-		fprintf( fl, "%f\n", equations_span[i] ) ;
-	    }
+            for ( i = 0; i < fourier_accuracy; i++ )
+            {
+                fs << equations_span[i];
+                fs << std::endl;
+            }
 
             // writing Left-Hand-Sides of equations
-	    for ( i = 0; i < fourier_accuracy; i++ ) {
-		for ( n = 0; n < fourier_accuracy; n++ ) {
-		    if ( n == fourier_accuracy -1 )
-			fprintf( fl, "%f", equations_lhs[i][n] ) ;
-		    else
-			fprintf( fl, "%f ", equations_lhs[i][n] ) ;
-		}
-		fprintf( fl, "\n" ) ;
-	    }
+            for ( i = 0; i < fourier_accuracy; i++ )
+            {
+                for ( n = 0; n < fourier_accuracy; n++ )
+                {
+                    if ( n == fourier_accuracy -1 )
+                        fs << equations_lhs[i][n];
+                    else
+                        fs << equations_lhs[i][n] << " ";
+                }
+                fs << std::endl;
+            }
 
             // writing Right-Hand-Sides of equations
-	    for ( i = 0; i < fourier_accuracy; i++ ) {
-		for ( a = 0; a < aoa_iterations; a++ ) {
-		    if ( a == aoa_iterations -1 )
-			fprintf( fl, "%f", equations_rhs[a][i] ) ;
-		    else
-			fprintf( fl, "%f ", equations_rhs[a][i] ) ;
-		}
-		fprintf( fl, "\n" ) ;
-	    }
+            for ( i = 0; i < fourier_accuracy; i++ )
+            {
+                for ( a = 0; a < aoa_iterations; a++ )
+                {
+                    if ( a == aoa_iterations -1 )
+                        fs << equations_rhs[a][i];
+                    else
+                        fs << equations_rhs[a][i] << " ";
+                }
+                fs << std::endl;
+            }
 
             // writing Fourier series terms
-	    for ( n = 0; n < fourier_accuracy; n++ ) {
-		for ( a = 0; a < aoa_iterations; a++ ) {
-		    if ( a == aoa_iterations -1 )
-			fprintf( fl, "%f", fourier_terms[a][n] ) ;
-		    else
-			fprintf( fl, "%f ", fourier_terms[a][n] ) ;
-		}
-		fprintf( fl, "\n" ) ;
-	    }
+            for ( n = 0; n < fourier_accuracy; n++ )
+            {
+                for ( a = 0; a < aoa_iterations; a++ )
+                {
+                    if ( a == aoa_iterations -1 )
+                        fs << fourier_terms[a][n];
+                    else
+                        fs << fourier_terms[a][n] << " ";
+                }
+                fs << std::endl;
+            }
 
             // writing Wing::gamma (circulation)
-	    for ( i = 0; i < sections_fullspan; i++ ) {
-		for ( a = 0; a < aoa_iterations; a++ ) {
-		    if ( a == aoa_iterations -1 )
-			fprintf( fl, "%f", gamma[a][i] ) ;
-		    else
-			fprintf( fl, "%f ", gamma[a][i] ) ;
-		}
-		fprintf( fl, "\n" ) ;
-	    }
+            for ( i = 0; i < sections_fullspan; i++ )
+            {
+                for ( a = 0; a < aoa_iterations; a++ )
+                {
+                    if ( a == aoa_iterations -1 )
+                        fs << gamma[a][i];
+                    else
+                        fs << gamma[a][i] << " ";
+                }
+                fs << std::endl;
+            }
 
             // writing Wing::lift_coefficient_distribution
-	    for ( i = 0; i < sections_fullspan; i++ ) {
-		for ( a = 0; a < aoa_iterations; a++ ) {
-		    if ( a == aoa_iterations -1 )
-			fprintf( fl, "%f", lift_coefficient_distribution[a][i] ) ;
-		    else
-			fprintf( fl, "%f ", lift_coefficient_distribution[a][i] ) ;
-		}
-		fprintf( fl, "\n" ) ;
-	    }
+            for ( i = 0; i < sections_fullspan; i++ )
+            {
+                for ( a = 0; a < aoa_iterations; a++ )
+                {
+                    if ( a == aoa_iterations -1 )
+                        fs << lift_coefficient_distribution[a][i];
+                    else
+                        fs << lift_coefficient_distribution[a][i] << " ";
+                }
+                fs << std::endl;
+            }
 
             // writing Wing::induced_velocity_distribution
-	    for ( i = 0; i < sections_fullspan; i++ ) {
-		for ( a = 0; a < aoa_iterations; a++ ) {
-		    if ( a == aoa_iterations -1 )
-			fprintf( fl, "%f", induced_velocity_distribution[a][i] ) ;
-		    else
-			fprintf( fl, "%f ", induced_velocity_distribution[a][i] ) ;
-		}
-		fprintf( fl, "\n" ) ;
-	    }
+            for ( i = 0; i < sections_fullspan; i++ )
+            {
+                for ( a = 0; a < aoa_iterations; a++ )
+                {
+                    if ( a == aoa_iterations -1 )
+                        fs << induced_velocity_distribution[a][i];
+                    else
+                        fs << induced_velocity_distribution[a][i] << " ";
+                }
+                fs << std::endl;
+            }
 
             // writing Wing::induced_drag_coefficient_distribution
-	    for ( i = 0; i < sections_fullspan; i++ ) {
-		for ( a = 0; a < aoa_iterations; a++ ) {
-		    if ( a == aoa_iterations -1 )
-			fprintf( fl, "%f", induced_drag_coefficient_distribution[a][i] ) ;
-		    else
-			fprintf( fl, "%f ", induced_drag_coefficient_distribution[a][i] ) ;
-		}
-		fprintf( fl, "\n" ) ;
-	    }
+            for ( i = 0; i < sections_fullspan; i++ )
+            {
+                for ( a = 0; a < aoa_iterations; a++ )
+                {
+                    if ( a == aoa_iterations -1 )
+                        fs << induced_drag_coefficient_distribution[a][i];
+                    else
+                        fs << induced_drag_coefficient_distribution[a][i] << " ";
+                }
+                fs << std::endl;
+            }
 
             // writing Wing::lift_coefficient
-	    for ( a = 0; a < aoa_iterations; a++ ) {
-		fprintf( fl, "%f\n", lift_coefficient[a] ) ;
-	    }
+            for ( a = 0; a < aoa_iterations; a++ )
+            {
+                fs << lift_coefficient[a];
+                fs << std::endl;
+            }
 
             // writing Wing::induced_drag_coefficient
-	    for ( a = 0; a < aoa_iterations; a++ ) {
-		fprintf( fl, "%f\n", induced_drag_coefficient[a] ) ;
-	    }
+            for ( a = 0; a < aoa_iterations; a++ )
+            {
+                fs << induced_drag_coefficient[a];
+                fs << std::endl;
+            }
 
-	} else {
-	    // results doesnt exist
-	    fprintf( fl, "%d", 0 ) ;
-	}
-	fclose( fl) ;
-	strcpy( file_name, file ) ;
-	return true ;
+        } else {
+            // results doesnt exist
+            fs << 0 << std::endl;
+        }
 
-    } else {
-	return false ;
+        fs.close();
+
+        strcpy( file_name, file );
+
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::calculateCharacteristics() {
-   int a, i, n ;
-   double sum_nAn2, sum_nAnsin, tmp_gamma ;
+void Wing::calculateCharacteristics()
+{
+    int a, i, n ;
+    double sum_nAn2, sum_nAnsin, tmp_gamma ;
 
-   sum_nAn2 = 0.0;
+    sum_nAn2 = 0.0;
 
-   // creating arrays for every Angle of Attack
-   gamma = new double* [aoa_iterations] ;
-   lift_coefficient_distribution = new double* [aoa_iterations] ;
-   induced_velocity_distribution = new double* [aoa_iterations] ;
-   induced_drag_coefficient_distribution = new double* [aoa_iterations] ;
+    // creating arrays for every Angle of Attack
+    gamma = new double* [aoa_iterations] ;
+    lift_coefficient_distribution = new double* [aoa_iterations] ;
+    induced_velocity_distribution = new double* [aoa_iterations] ;
+    induced_drag_coefficient_distribution = new double* [aoa_iterations] ;
 
-   lift_coefficient = new double [aoa_iterations] ;
-   induced_drag_coefficient = new double [aoa_iterations] ;
+    lift_coefficient = new double [aoa_iterations] ;
+    induced_drag_coefficient = new double [aoa_iterations] ;
 
-   // creating wing span distributions arrays second dimension
-   for ( a = 0; a < aoa_iterations; a++ ) {
+    // creating wing span distributions arrays second dimension
+    for ( a = 0; a < aoa_iterations; a++ )
+    {
 
-       // creating arrays for every Cross Section
-       gamma[a] = new double [sections_fullspan ] ;
-       lift_coefficient_distribution[a] = new double [ sections_fullspan ] ;
-       induced_velocity_distribution[a] = new double [ sections_fullspan ] ;
-       induced_drag_coefficient_distribution[a] = new double [ sections_fullspan ] ;
-   }
+        // creating arrays for every Cross Section
+        gamma[a] = new double [sections_fullspan ] ;
+        lift_coefficient_distribution[a] = new double [ sections_fullspan ] ;
+        induced_velocity_distribution[a] = new double [ sections_fullspan ] ;
+        induced_drag_coefficient_distribution[a] = new double [ sections_fullspan ] ;
+    }
 
-   // calculating characteristics for every angle of attack
-   for ( a = 0; a < aoa_iterations; a++ ) {
+    // calculating characteristics for every angle of attack
+    for ( a = 0; a < aoa_iterations; a++ )
+    {
+        // start value of temporary coefficients
+        lift_coefficient[a] = 0.0 ;
 
-       // start value of temporary coefficients
-       lift_coefficient[a] = 0.0 ;
+        for ( i = 0; i < sections_fullspan; i++ )
+        {
+            // start values
+            tmp_gamma = 0.0 ;
+            sum_nAn2 = 0.0 ;
+            sum_nAnsin = 0.0 ;
 
-       for ( i = 0; i < sections_fullspan; i++ ) {
+            // for every Fourier series term
+            for ( n = 0; n < fourier_accuracy; n++ )
+            {
+                // calculating gamma (circulation) for single Cross Section and Angle of Attack
+                tmp_gamma = tmp_gamma + sin( ( (double)n + 1 ) * phi[i] ) * fourier_terms[a][n] ;
 
-           // start values
-           tmp_gamma = 0.0 ;
-           sum_nAn2 = 0.0 ;
-           sum_nAnsin = 0.0 ;
+                // calculating temporary coefficients
+                sum_nAnsin += ( (double)n + 1 ) * sin( ( (double)n + 1 ) * phi[i] ) * fourier_terms[a][n] ;
+                sum_nAn2 += ( (double)n + 1 ) * pow( fourier_terms[a][n], 2 ) ;
+            }
 
-           // for every Fourier series term
-           for ( n = 0; n < fourier_accuracy; n++ ) {
+            // finishing calculating gamma (circulation)
+            tmp_gamma = tmp_gamma * ( 2 * wing_span * fluid_velocity ) ;
+            gamma[a][i] = tmp_gamma ;
 
-               // calculating gamma (circulation) for single Cross Section and Angle of Attack
-               tmp_gamma = tmp_gamma + sin( ( (double)n + 1 ) * phi[i] ) * fourier_terms[a][n] ;
+            // calculating lift coef. distribution for single Cross Section and Angle of Attack
+            lift_coefficient_distribution[a][i] = 2 * gamma[a][i] / ( fluid_velocity * chord_length[i] ) ;
 
-               // calculating temporary coefficients
-               sum_nAnsin += ( (double)n + 1 ) * sin( ( (double)n + 1 ) * phi[i] ) * fourier_terms[a][n] ;
-               sum_nAn2 += ( (double)n + 1 ) * pow( fourier_terms[a][n], 2 ) ;
-           }
+            // calculating induced valocity distribution distribution for single Cross Section and Angle of Attack
+            induced_velocity_distribution[a][i] = ( i != 0 && i != sections_fullspan - 1 ) ? ( ( -1 ) / sin( phi[i] ) * sum_nAnsin ) : ( 0 ) ;
 
-           // finishing calculating gamma (circulation)
-           tmp_gamma = tmp_gamma * ( 2 * wing_span * fluid_velocity ) ;
-           gamma[a][i] = tmp_gamma ;
+            // calculating induced drag coef. distribution for single Cross Section and Angle of Attack
+            induced_drag_coefficient_distribution[a][i] = ( -induced_velocity_distribution[a][i] ) * gamma[a][i] / ( fluid_velocity * fluid_velocity * chord_length[i] ) ;
 
-           // calculating lift coef. distribution for single Cross Section and Angle of Attack
-           lift_coefficient_distribution[a][i] = 2 * gamma[a][i] / ( fluid_velocity * chord_length[i] ) ;
+            // calculating lift coef. for single Angle of Attack and whole wing
+            if ( i > 0 ) lift_coefficient[a] += ( wingspan[i] - wingspan[i-1] ) * ( lift_coefficient_distribution[a][i] + lift_coefficient_distribution[a][i - 1] ) / 2 ;
+            //lift_coefficient[a] = sum_nAnsin
+        }
 
-           // calculating induced valocity distribution distribution for single Cross Section and Angle of Attack
-           induced_velocity_distribution[a][i] = ( i != 0 && i != sections_fullspan - 1 ) ? ( ( -1 ) / sin( phi[i] ) * sum_nAnsin ) : ( 0 ) ;
+        lift_coefficient[a] /= wing_span ;
 
-           // calculating induced drag coef. distribution for single Cross Section and Angle of Attack
-           induced_drag_coefficient_distribution[a][i] = ( -induced_velocity_distribution[a][i] ) * gamma[a][i] / ( fluid_velocity * fluid_velocity * chord_length[i] ) ;
+        // calcualting induced drag coef. for single Angle of Attack and whole wing
+        induced_drag_coefficient[a] = pi * aspect_ratio * sum_nAn2 ;
 
-           // calculating lift coef. for single Angle of Attack and whole wing
-           if ( i > 0 ) lift_coefficient[a] += ( wingspan[i] - wingspan[i-1] ) * ( lift_coefficient_distribution[a][i] + lift_coefficient_distribution[a][i - 1] ) / 2 ;
-           //lift_coefficient[a] = sum_nAnsin
-
-       }
-
-       lift_coefficient[a] /= wing_span ;
-
-       // calcualting induced drag coef. for single Angle of Attack and whole wing
-       induced_drag_coefficient[a] = pi * aspect_ratio * sum_nAn2 ;
-
-   }
+    }
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::calculateGeometry() {
+void Wing::calculateGeometry()
+{
     int i ;
     // geometric data
     wing_span = .0 ;
@@ -1083,8 +1176,8 @@ void Wing::calculateGeometry() {
     taper_ratio = .0 ;
 
     // If at least 2 sections coduct calculations
-    if ( sections > 1 ) {
-
+    if ( sections > 1 )
+    {
         // Calculating Wing Span (Wing::wing_span)
         wing_span = 2 * ( sections_data[0][sections - 1] - sections_data[0][0] ) ;
 
@@ -1105,17 +1198,22 @@ void Wing::calculateGeometry() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::checkIfSectionExists( double span_y ) {
+bool Wing::checkIfSectionExists( double span_y )
+{
     int i ;
     bool cs_exists = false ;
     double* haystack_span ;
     haystack_span = sections_data[0];
 
-    for ( i = 0; i < sections; i++ ) {
-        if ( span_y == *haystack_span ) {
+    for ( i = 0; i < sections; i++ )
+    {
+        if ( span_y == *haystack_span )
+        {
             cs_exists = true ;
             break ;
-        } else {
+        }
+        else
+        {
             haystack_span++ ;
             continue ;
         }
@@ -1126,7 +1224,8 @@ bool Wing::checkIfSectionExists( double span_y ) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::createEquations() {
+void Wing::createEquations()
+{
     int i, a, n, cur_section ;
     double sin_phi, rhs ;
     int step = (int)floor( ( sections_iterations - 2.0 ) / ( ( fourier_accuracy + 1.0 ) / 2.0 ) ) ;
@@ -1141,25 +1240,30 @@ void Wing::createEquations() {
     equations_span = new double [fourier_accuracy] ;
 
     // creating second dimension
-    for ( i = 0; i < fourier_accuracy; i++ ) {
+    for ( i = 0; i < fourier_accuracy; i++ )
+    {
         equations_lhs[i] = new double [fourier_accuracy] ;
     }
 
     // creating second dimension
-    for ( a = 0; a < aoa_iterations; a++ ) {
+    for ( a = 0; a < aoa_iterations; a++ )
+    {
         equations_rhs[a] = new double [fourier_accuracy] ;
     }
 
     cur_section = step ;
 
     // calculating linear equations system's matrices for left wing
-    //for ( i = 1; i < ( ( fourier_accuracy + 1) / 2 ) - 1; i++ ) {
-    for ( i = 0; i < ( ( fourier_accuracy + 1) / 2 ) - 1; i++ ) {
-        for ( n = 1; n <= fourier_accuracy; n++ ) {
+    //for ( i = 1; i < ( ( fourier_accuracy + 1) / 2 ) - 1; i++ )
+    for ( i = 0; i < ( ( fourier_accuracy + 1) / 2 ) - 1; i++ )
+    {
+        for ( n = 1; n <= fourier_accuracy; n++ )
+        {
             equations_lhs[i][ n - 1 ] = ( sin( phi[cur_section] ) + ( (double)n ) * mu[cur_section] ) * sin( ( (double)n ) * phi[cur_section] ) ;
         }
 
-        for ( a = 0; a < aoa_iterations; a++ ) {
+        for ( a = 0; a < aoa_iterations; a++ )
+        {
             sin_phi = sin( phi[cur_section] ) ;
             rhs = sin_phi * mu[cur_section] *  ( angle_of_attack_rad[a] - angle_of_0_lift_rad[cur_section] );
             equations_rhs[a][i] = rhs ;
@@ -1171,11 +1275,13 @@ void Wing::createEquations() {
     }
 
     // calculating linear equations system's matrices for plane of simetricity
-    for ( n = 1; n <= fourier_accuracy; n++ ) {
+    for ( n = 1; n <= fourier_accuracy; n++ )
+    {
         equations_lhs[( ( fourier_accuracy + 1) / 2 ) - 1][ n-1 ] = ( sin( phi[sections_iterations - 1] ) + ( (double)n ) * mu[sections_iterations - 1] ) * sin( ( (double)n ) * phi[sections_iterations - 1] ) ;
     }
 
-    for ( a = 0; a < aoa_iterations; a++ ) {
+    for ( a = 0; a < aoa_iterations; a++ )
+    {
         sin_phi = sin( phi[sections_iterations-1] ) ;
         rhs = sin_phi * mu[sections_iterations - 1] *  ( angle_of_attack_rad[a] - angle_of_0_lift_rad[sections_iterations - 1] );
         equations_rhs[a][( ( fourier_accuracy + 1) / 2 ) - 1] = rhs ;
@@ -1187,12 +1293,15 @@ void Wing::createEquations() {
     cur_section = sections_fullspan - step - 1 ;
 
     // calculating linear equations system's matrices for right wing
-    for ( i = fourier_accuracy - 1; i > ( ( fourier_accuracy + 1) / 2 ) - 1; i-- ) {
-        for ( n = 1; n <= fourier_accuracy; n++ ) {
+    for ( i = fourier_accuracy - 1; i > ( ( fourier_accuracy + 1) / 2 ) - 1; i-- )
+    {
+        for ( n = 1; n <= fourier_accuracy; n++ )
+        {
             equations_lhs[i][ n-1 ] = ( sin( phi[cur_section] ) + ( (double)n ) * mu[cur_section] ) * sin( ( (double)n ) * phi[cur_section] ) ;
         }
 
-        for ( a = 0; a < aoa_iterations; a++ ) {
+        for ( a = 0; a < aoa_iterations; a++ )
+        {
             sin_phi = sin( phi[cur_section] ) ;
             rhs = sin_phi * mu[cur_section] *  ( angle_of_attack_rad[a] - angle_of_0_lift_rad[cur_section] ) ;
             equations_rhs[a][i] = rhs ;
@@ -1202,12 +1311,12 @@ void Wing::createEquations() {
 
         cur_section = cur_section - step ;
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::interpolateSections() {
+void Wing::interpolateSections()
+{
     int i ;
 
     // creating arrays of interpolating data
@@ -1244,7 +1353,8 @@ void Wing::interpolateSections() {
     angle_of_0_lift_rad[0] = ( 2 * pi * angle_of_0_lift_deg[0] ) / 360 ;
 
     // interpolating loop
-    for ( i = 1; i < sections_iterations - 1; i++ ) {
+    for ( i = 1; i < sections_iterations - 1; i++ )
+    {
         // root span allready known... so first interpolation made for greater by one
         i_wingspan += wingspan_step ;
         wingspan[i] = i_wingspan ;
@@ -1266,24 +1376,30 @@ void Wing::interpolateSections() {
             angle_of_0_lift_rad[i] = ( 2 * pi * angle_of_0_lift_deg[i] ) / 360 ;
             i_angle_of_0_lift = angle_of_0_lift_deg[i] ;
 
-        } else {
+        }
+        else
+        {
             std::cerr << "span= " << wingspan[i] ;
 
             // updating 'per_step_' values
             // looking for new gradients 'per_step_'
-            while ( current_section < sections - 1 ) {
+            while ( current_section < sections - 1 )
+            {
                 current_section++ ;
 
                 // when find recalculate 'per_step_' values
-                if ( wingspan[i] + 0.0001 > sections_data[0][current_section] && wingspan[i] < sections_data[0][current_section + 1] + 0.0001 ) {
+                if ( wingspan[i] + 0.0001 > sections_data[0][current_section] && wingspan[i] < sections_data[0][current_section + 1] + 0.0001 )
+                {
                     per_step_leading_edge = ( sections_data[1][current_section + 1] - sections_data[1][current_section] ) / ( sections_data[0][current_section + 1] - sections_data[0][current_section] ) * wingspan_step ;
                     per_step_trailing_edge = ( sections_data[2][current_section + 1] - sections_data[2][current_section] ) / ( sections_data[0][current_section + 1] - sections_data[0][current_section] ) * wingspan_step ;
                     per_step_lift_curve_slope = ( sections_data[3][current_section + 1] - sections_data[3][current_section] ) / ( sections_data[0][current_section + 1] - sections_data[0][current_section] ) * wingspan_step ;
                     per_step_angle_of_0_lift = ( sections_data[4][current_section + 1] - sections_data[4][current_section] ) / ( sections_data[0][current_section + 1] - sections_data[0][current_section] ) * wingspan_step ;
-                    break ;
-                } else
-                    continue ;
-
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
             }
 
             std::cerr << "\tLE_perstep= " << per_step_leading_edge ;
@@ -1320,7 +1436,8 @@ void Wing::interpolateSections() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::iterateAoA() {
+void Wing::iterateAoA()
+{
     int i ;
 
     // calculating angle of attack iteration step
@@ -1334,7 +1451,8 @@ void Wing::iterateAoA() {
     angle_of_attack_rad = new double[aoa_iterations] ;
 
     // calculating AoAs arrays
-    for ( i = 0; i < aoa_iterations; i++ ) {
+    for ( i = 0; i < aoa_iterations; i++ )
+    {
         angle_of_attack_deg[i] = aoa_start + aoa_step * (double)i ;
         angle_of_attack_rad[i] = 2 * pi * angle_of_attack_deg[i] / 360 ;
     }
@@ -1342,16 +1460,19 @@ void Wing::iterateAoA() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::releaseResults () {
+void Wing::releaseResults()
+{
     int i ;
     // releasing memory
-    for ( i = 0; i < old_accuracy; i++ ) {
+    for ( i = 0; i < old_accuracy; i++ )
+    {
         delete [] equations_lhs[i] ;
         // and setting null address
         equations_lhs[i] = 0 ;
     }
 
-    for ( i = 0; i < old_aoa_iterations; i++ ) {
+    for ( i = 0; i < old_aoa_iterations; i++ )
+    {
         delete [] equations_rhs[i] ;
         delete [] fourier_terms[i] ;
         delete [] gamma[i] ;
@@ -1412,72 +1533,76 @@ void Wing::releaseResults () {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::rewriteSectionsForFullSpan() {
-   double* f_wingspan ;
-   double* f_chord_length ;
-   double* f_lift_curve_slope ;
-   double* f_angle_of_0_lift_deg ;
-   double* f_angle_of_0_lift_rad ;
-   int f_iterations = 2 * sections_iterations - 1 ;
-   int i ;
+void Wing::rewriteSectionsForFullSpan()
+{
+    double* f_wingspan ;
+    double* f_chord_length ;
+    double* f_lift_curve_slope ;
+    double* f_angle_of_0_lift_deg ;
+    double* f_angle_of_0_lift_rad ;
+    int f_iterations = 2 * sections_iterations - 1 ;
+    int i ;
 
-   // creating full span arrays
-   f_wingspan            = new double[f_iterations] ;
-   f_chord_length        = new double[f_iterations] ;
-   f_lift_curve_slope    = new double[f_iterations] ;
-   f_angle_of_0_lift_deg = new double[f_iterations] ;
-   f_angle_of_0_lift_rad = new double[f_iterations] ;
-   phi = new double[f_iterations] ;
-   mu  = new double[f_iterations] ;
+    // creating full span arrays
+    f_wingspan            = new double[f_iterations] ;
+    f_chord_length        = new double[f_iterations] ;
+    f_lift_curve_slope    = new double[f_iterations] ;
+    f_angle_of_0_lift_deg = new double[f_iterations] ;
+    f_angle_of_0_lift_rad = new double[f_iterations] ;
+    phi = new double[f_iterations] ;
+    mu  = new double[f_iterations] ;
 
-   // left wing tip to wing root (excluded)
-   for ( i = 0; i < sections_iterations; i++ ) {
-       f_wingspan[i] = wingspan[i] ;
-       f_chord_length[i] = chord_length[i] ;
-       f_lift_curve_slope[i] = lift_curve_slope[i] ;
-       f_angle_of_0_lift_deg[i] = angle_of_0_lift_deg[i] ;
-       f_angle_of_0_lift_rad[i] = angle_of_0_lift_rad[i] ;
+    // left wing tip to wing root (excluded)
+    for ( i = 0; i < sections_iterations; i++ )
+    {
+        f_wingspan[i] = wingspan[i] ;
+        f_chord_length[i] = chord_length[i] ;
+        f_lift_curve_slope[i] = lift_curve_slope[i] ;
+        f_angle_of_0_lift_deg[i] = angle_of_0_lift_deg[i] ;
+        f_angle_of_0_lift_rad[i] = angle_of_0_lift_rad[i] ;
 
-       // calulating fi & mi
-       phi[i] = acos( ( -2 ) * f_wingspan[i] / wing_span ) ;
-       mu[i]  = ( 0.25 * f_chord_length[i] * f_lift_curve_slope[i] ) / wing_span ;
-   }
+        // calulating fi & mi
+        phi[i] = acos( ( -2 ) * f_wingspan[i] / wing_span ) ;
+        mu[i]  = ( 0.25 * f_chord_length[i] * f_lift_curve_slope[i] ) / wing_span ;
+    }
 
-   // wing root (included) to right wing tip
-   for ( i = 1; i < sections_iterations; i++ ) {
-       f_wingspan[ i + sections_iterations - 1 ] = - wingspan[i] ;
-       f_chord_length[ i + sections_iterations - 1 ] = chord_length[i] ;
-       f_lift_curve_slope[ i + sections_iterations - 1 ] = lift_curve_slope[i] ;
-       f_angle_of_0_lift_deg[ i + sections_iterations - 1 ] = angle_of_0_lift_deg[i] ;
-       f_angle_of_0_lift_rad[ i + sections_iterations - 1 ] = angle_of_0_lift_rad[i] ;
+    // wing root (included) to right wing tip
+    for ( i = 1; i < sections_iterations; i++ )
+    {
+        f_wingspan[ i + sections_iterations - 1 ] = - wingspan[i] ;
+        f_chord_length[ i + sections_iterations - 1 ] = chord_length[i] ;
+        f_lift_curve_slope[ i + sections_iterations - 1 ] = lift_curve_slope[i] ;
+        f_angle_of_0_lift_deg[ i + sections_iterations - 1 ] = angle_of_0_lift_deg[i] ;
+        f_angle_of_0_lift_rad[ i + sections_iterations - 1 ] = angle_of_0_lift_rad[i] ;
 
-       // calulating fi & mi
-       phi[ i + sections_iterations - 1 ] = acos( ( -2 ) * f_wingspan[ i + sections_iterations - 1 ] / wing_span ) ;
-       mu[ i + sections_iterations - 1 ]  = ( 0.25 * f_chord_length[ i + sections_iterations - 1 ] * f_lift_curve_slope[ i + sections_iterations - 1 ] ) / wing_span ;
-   }
+        // calulating fi & mi
+        phi[ i + sections_iterations - 1 ] = acos( ( -2 ) * f_wingspan[ i + sections_iterations - 1 ] / wing_span ) ;
+        mu[ i + sections_iterations - 1 ]  = ( 0.25 * f_chord_length[ i + sections_iterations - 1 ] * f_lift_curve_slope[ i + sections_iterations - 1 ] ) / wing_span ;
+    }
 
-   // setting number of sections in full span Wing::sections_fullspan
-   sections_fullspan = f_iterations ;
+    // setting number of sections in full span Wing::sections_fullspan
+    sections_fullspan = f_iterations ;
 
-   // deleting semi span arrays
-   delete [] wingspan  ;
-   delete [] chord_length ;
-   delete [] lift_curve_slope ;
-   delete [] angle_of_0_lift_deg ;
-   delete [] angle_of_0_lift_rad ;
+    // deleting semi span arrays
+    delete [] wingspan  ;
+    delete [] chord_length ;
+    delete [] lift_curve_slope ;
+    delete [] angle_of_0_lift_deg ;
+    delete [] angle_of_0_lift_rad ;
 
-   // pointing sections arrays to full span arrays
-   wingspan = f_wingspan ;
-   chord_length = f_chord_length ;
-   lift_curve_slope = f_lift_curve_slope ;
-   angle_of_0_lift_deg = f_angle_of_0_lift_deg ;
-   angle_of_0_lift_rad = f_angle_of_0_lift_rad ;
+    // pointing sections arrays to full span arrays
+    wingspan = f_wingspan ;
+    chord_length = f_chord_length ;
+    lift_curve_slope = f_lift_curve_slope ;
+    angle_of_0_lift_deg = f_angle_of_0_lift_deg ;
+    angle_of_0_lift_rad = f_angle_of_0_lift_rad ;
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::solveEquations() {
+bool Wing::solveEquations()
+{
     bool success = true ;
     int a, i, n = 0 ;
     double* lhs ;
@@ -1495,22 +1620,28 @@ bool Wing::solveEquations() {
     rhs = new double [ fourier_accuracy ] ;
 
     // iterating over Angle of Attack
-    for ( a = 0; a < aoa_iterations; a++ ) {
+    for ( a = 0; a < aoa_iterations; a++ )
+    {
         // copying equations Right-Hand-Side to temporary array
-        for ( i = 0; i < fourier_accuracy; i++ ) {
+        for ( i = 0; i < fourier_accuracy; i++ )
+        {
             rhs[i] = equations_rhs[a][i] ;
             // copying equations Left-Hand-Side to temporary array
-            for ( n = 0; n < fourier_accuracy; n++ ) {
+            for ( n = 0; n < fourier_accuracy; n++ )
+            {
                 lhs[fourier_accuracy*n+i] = equations_lhs[n][i] ;
             }
         }
+
         // solving system of linear equations for single Angle of Attack
         if ( GaussJordan::solve( fourier_accuracy, lhs, rhs, rhs ) == BSC_FAILURE )
         {
             success = false ;
         }
+
         // copying equation's result
-        for ( i = 0; i < fourier_accuracy; i++ ) {
+        for ( i = 0; i < fourier_accuracy; i++ )
+        {
             fourier_terms[a][i] = rhs[i] ;
         }
 
@@ -1526,16 +1657,20 @@ bool Wing::solveEquations() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::sortFullSpanSections() {
-     bool sorted ;
+void Wing::sortFullSpanSections()
+{
+    bool sorted ;
     int i, j ;
     double temp ;
 
-    for ( i = 1; i < sections_fullspan; i++ ) {
+    for ( i = 1; i < sections_fullspan; i++ )
+    {
         sorted = true ;
 
-        for ( j = 0; j < sections_fullspan - i; j++ ) {
-            if ( wingspan[j] > wingspan[j+1] ) {
+        for ( j = 0; j < sections_fullspan - i; j++ )
+        {
+            if ( wingspan[j] > wingspan[j+1] )
+            {
                 // wing span
                 temp = wingspan[j] ;
                 wingspan[j] = wingspan[j+1] ;
@@ -1567,7 +1702,9 @@ void Wing::sortFullSpanSections() {
                 sorted = false ;
             }
         }
-        if ( sorted ) {
+
+        if ( sorted )
+        {
             break ;
         }
     }
@@ -1576,17 +1713,22 @@ void Wing::sortFullSpanSections() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Wing::sortSectionsData() {
+void Wing::sortSectionsData()
+{
     bool sorted ;
     int i, j, k ;
     double temp ;
 
-    for ( i = 1; i < sections; i++ ) {
+    for ( i = 1; i < sections; i++ )
+    {
         sorted = true ;
 
-        for ( j = 0; j < sections - i; j++ ) {
-            if ( sections_data[0][j] > sections_data[0][j+1] ) {
-                for (k=0;k<5;k++) {
+        for ( j = 0; j < sections - i; j++ )
+        {
+            if ( sections_data[0][j] > sections_data[0][j+1] )
+            {
+                for ( k=0; k<5; k++ )
+                {
                     temp = sections_data[k][j] ;
                     sections_data[k][j] = sections_data[k][j+1] ;
                     sections_data[k][j+1] = temp ;
@@ -1602,54 +1744,87 @@ void Wing::sortSectionsData() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::writeAoAToFile() {
+bool Wing::writeAoAToFile()
+{
     int a ;
-    FILE* file ;
+    std::fstream fs( "../tmp/tmp.aoa", std::ios_base::out );
 
-    if ((file=fopen("../tmp/tmp.aoa", "w"))!=NULL) {
-        for ( a = 0; a < aoa_iterations; a++ ) {
-            fprintf( file, "%f\t%f\n", angle_of_attack_deg[a], angle_of_attack_rad[a] ) ;
+    if ( fs.is_open() )
+    {
+        for ( a = 0; a < aoa_iterations; a++ )
+        {
+            fs << angle_of_attack_deg[a];
+            fs << "\t";
+            fs << angle_of_attack_rad[a];
+            fs << std::endl;
         }
-        fclose( file) ;
-        return true ;
-    } else {
+
+        fs.close();
+        return true;
+
+    }
+    else
+    {
         return false ;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::writeEquationsToFile() {
+bool Wing::writeEquationsToFile()
+{
     int a, i, n ;
     bool ret = true ;
-    FILE* file ;
+    std::fstream fs( "../tmp/tmp.lhs", std::ios_base::out );
 
-    if ((file=fopen("../tmp/tmp.lhs", "w"))!=NULL) {
-        for ( i = 0; i < fourier_accuracy; i++ ) {
-            fprintf( file, "%f\t\t", equations_span[i] ) ;
-            for ( n = 0; n < fourier_accuracy; n++ ) {
-                fprintf( file, "%f\t", equations_lhs[i][n] ) ;
+    if ( fs.is_open() )
+    {
+        for ( i = 0; i < fourier_accuracy; i++ )
+        {
+            fs << equations_span[i];
+            fs << "\t";
+            fs << "\t";
+
+            for ( n = 0; n < fourier_accuracy; n++ )
+            {
+                fs << equations_lhs[i][n];
+                fs << "\t";
             }
-            fprintf( file, "\n" ) ;
+
+            fs << std::endl;
         }
-        fclose( file ) ;
-    } else {
-        fclose( file ) ;
+    }
+    else
+    {
         ret = false ;
     }
 
-    if ((file=fopen("../tmp/tmp.rhs", "w"))!=NULL && ret) {
-        for ( i = 0; i < fourier_accuracy; i++ ) {
-            fprintf( file, "%f\t\t", equations_span[i] ) ;
-            for ( a = 0; a < aoa_iterations; a++ ) {
-                fprintf( file, "%f\t", equations_rhs[a][i] ) ;
+    if ( fs.is_open() && ret )
+    {
+        for ( i = 0; i < fourier_accuracy; i++ )
+        {
+            fs << equations_span[i];
+            fs << "\t";
+            fs << "\t";
+
+            for ( a = 0; a < aoa_iterations; a++ )
+            {
+                fs << equations_rhs[a][i];
+                fs << "\t";
             }
-            fprintf( file, "\n" ) ;
+
+            fs << std::endl;
         }
-        fclose( file ) ;
-    } else {
-        fclose( file ) ;
+
+    }
+    else
+    {
         ret = false ;
+    }
+
+    if ( fs.is_open() )
+    {
+        fs.close();
     }
 
     return ret ;
@@ -1657,100 +1832,168 @@ bool Wing::writeEquationsToFile() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::writeFourierToFile() {
+bool Wing::writeFourierToFile()
+{
     int a, n ;
-    FILE* file ;
+    std::fstream fs( "../tmp/tmp.terms", std::ios_base::out );
 
-    if ((file=fopen("../tmp/tmp.terms", "w"))!=NULL) {
-        for ( n = 0; n < fourier_accuracy; n++ ) {
-            for ( a = 0; a < aoa_iterations; a++ ) {
-                fprintf( file, "%f\t", fourier_terms[a][n] ) ;
+    if ( fs.is_open() )
+    {
+        for ( n = 0; n < fourier_accuracy; n++ )
+        {
+            for ( a = 0; a < aoa_iterations; a++ )
+            {
+                fs << fourier_terms[a][n];
+                fs << "\t";
             }
-            fprintf( file, "\n" ) ;
+
+            fs << std::endl;
         }
-        fclose( file) ;
+
+        fs.close();
+
         return true ;
-    } else {
+    }
+    else
+    {
         return false ;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::writeFullspanToFile() {
+bool Wing::writeFullspanToFile()
+{
     int i ;
-    FILE* file ;
+    std::fstream fs( "../tmp/tmp.fullspan", std::ios_base::out );
 
-    if ((file=fopen("../tmp/tmp.fullspan", "w"))!=NULL) {
-        for ( i = 0; i < sections_fullspan; i++ ) {
-            fprintf( file, "%f\t%f\t%f\t%f\t%f\t%f\t%f\n", wingspan[i], chord_length[i], lift_curve_slope[i], angle_of_0_lift_deg[i], angle_of_0_lift_rad[i], phi[i], mu[i] );
+    if ( fs.is_open() )
+    {
+        for ( i = 0; i < sections_fullspan; i++ )
+        {
+            fs << wingspan[i];
+            fs << "\t";
+            fs << chord_length[i];
+            fs << "\t";
+            fs << lift_curve_slope[i];
+            fs << "\t";
+            fs << angle_of_0_lift_deg[i];
+            fs << "\t";
+            fs << angle_of_0_lift_rad[i];
+            fs << "\t";
+            fs << phi[i];
+            fs << "\t";
+            fs << mu[i];
+            fs << std::endl;
         }
-        fclose( file) ;
+
+        fs.close();
+
         return true ;
-    } else {
+    }
+    else
+    {
         return false ;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::writeInterpolatedToFile() {
+bool Wing::writeInterpolatedToFile()
+{
     int i ;
-    FILE* file ;
+    std::fstream fs( "../tmp/tmp.interpolated", std::ios_base::out );
 
-    if ((file=fopen("../tmp/tmp.interpolated", "w"))!=NULL) {
-        for ( i = 0; i < sections_iterations; i++ ) {
-            fprintf( file, "%f\t%f\t%f\t%f\t%f\n", wingspan[i], chord_length[i], lift_curve_slope[i], angle_of_0_lift_deg[i], angle_of_0_lift_rad[i] ) ;
+    if ( fs.is_open() )
+    {
+        for ( i = 0; i < sections_iterations; i++ )
+        {
+            fs << wingspan[i];
+            fs << "\t";
+            fs << chord_length[i];
+            fs << "\t";
+            fs << lift_curve_slope[i];
+            fs << "\t";
+            fs << angle_of_0_lift_deg[i];
+            fs << "\t";
+            fs << angle_of_0_lift_rad[i];
+            fs << std::endl;
         }
-        fclose( file) ;
+
+        fs.close();
+
         return true ;
-    } else {
+    }
+    else
+    {
         return false ;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::writeParametersToFile() {
-    FILE* file ;
+bool Wing::writeParametersToFile()
+{
+    std::fstream fs( "../tmp/tmp.parameters", std::ios_base::out );
 
-    if ((file=fopen("../tmp/tmp.parameters", "w"))!=NULL) {
-        fprintf( file, "#Angle of Attack Iteration Start Value [deg]\n" );
-        fprintf( file, "aoa_start =  %f\n", aoa_start ) ;
-        fprintf( file, "\n#Angle of Attack Iteration Finish Value [deg]\n" );
-        fprintf( file, "aoa_finish = %f\n", aoa_finish ) ;
-        fprintf( file, "\n#Angle of Attack Number of Iterations [-]\n" );
-        fprintf( file, "aoa_iterations = %d\n", aoa_iterations ) ;
-        fprintf( file, "\n#Angle of Attack Step [deg]\n" );
-        fprintf( file, "aoa_step = %f\n", aoa_step ) ;
-        fprintf( file, "\n#Fluid Velocity [m/s]\n" );
-        fprintf( file, "fluid_velocity = %f\n", fluid_velocity ) ;
-        fprintf( file, "\n#Fluid Density [kg/cu m]\n" );
-        fprintf( file, "fluid_density = %f\n", fluid_density ) ;
-        fprintf( file, "\n#Number of Cross Sections [-]\n" );
-        fprintf( file, "sections_iterations = %d\n", sections_iterations ) ;
-        fprintf( file, "\n#Fourier Series Accuracy [-]\n" );
-        fprintf( file, "fourier_accuracy = %d\n", ( ( fourier_accuracy + 1 ) / 2 ) ) ;
-        fclose( file) ;
+    if ( fs.is_open() )
+    {
+        fs << "#Angle of Attack Iteration Start Value [deg]" << std::endl;
+        fs << "aoa_start =  " << aoa_start << std::endl;
+        fs << "\n#Angle of Attack Iteration Finish Value [deg]" << std::endl;
+        fs << "aoa_finish = " << aoa_finish << std::endl;
+        fs << "\n#Angle of Attack Number of Iterations [-]" << std::endl;
+        fs << "aoa_iterations = " << aoa_iterations << std::endl;
+        fs << "\n#Angle of Attack Step [deg]" << std::endl;
+        fs << "aoa_step = " << aoa_step << std::endl;
+        fs << "\n#Fluid Velocity [m/s]" << std::endl;
+        fs << "fluid_velocity = " << fluid_velocity << std::endl;
+        fs << "\n#Fluid Density [kg/cu m]" << std::endl;
+        fs << "fluid_density = " << fluid_density << std::endl;
+        fs << "\n#Number of Cross Sections [-]" << std::endl;
+        fs << "sections_iterations = " << sections_iterations << std::endl;
+        fs << "\n#Fourier Series Accuracy [-]" << std::endl;
+        fs << "fourier_accuracy = " << ( ( fourier_accuracy + 1 ) / 2 ) << std::endl;
+
+        fs.close();
+
         return true ;
-    } else {
+    }
+    else
+    {
         return false ;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool Wing::writeWingInputToFile() {
+bool Wing::writeWingInputToFile()
+{
     int i ;
-    FILE* file ;
+    std::fstream fs( "../tmp/tmp.winginput", std::ios_base::out );
 
-    if ((file=fopen("../tmp/tmp.winginput", "w"))!=NULL) {
-        for ( i = 0; i < sections; i++ ) {
-            fprintf( file, "%f\t%f\t%f\t%f\t%f\n", sections_data[0][i], sections_data[1][i], sections_data[2][i], sections_data[3][i], sections_data[4][i] ) ;
+    if ( fs.is_open() )
+    {
+        for ( i = 0; i < sections; i++ )
+        {
+            fs << sections_data[0][i];
+            fs << "\t";
+            fs << sections_data[1][i];
+            fs << "\t";
+            fs << sections_data[2][i];
+            fs << "\t";
+            fs << sections_data[3][i];
+            fs << "\t";
+            fs << sections_data[4][i];
+            fs << std::endl;
         }
-        fclose( file) ;
+
+        fs.close();
+
         return true ;
-    } else {
+    }
+    else
+    {
         return false ;
     }
 }
