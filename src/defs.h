@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #define BSC_AERO_APP_NAME   "BScAero"
-#define BSC_AERO_APP_VER    "0.1"
+#define BSC_AERO_APP_VER    "0.2"
 #define BSC_AERO_ORG_NAME   "Marek_Cel"
 #define BSC_AERO_ORG_DOMAIN "marekcel.pl"
 

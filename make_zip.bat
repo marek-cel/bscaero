@@ -22,6 +22,6 @@ rem call "%QTDIR%\bin\windeployqt.exe" --release mscsim.exe
 rem cd ..\..
 call "%QTDIR%\bin\windeployqt.exe" --release bscaero\bin\bscaero.exe
 
-"C:\Program Files\7-Zip\7z.exe" a bscaero_0.1_win64.zip -r bscaero\
+"C:\Program Files\7-Zip\7z.exe" a bscaero_0.2_win64.zip -r bscaero\
 
 pause
